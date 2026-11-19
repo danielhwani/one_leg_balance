@@ -80,7 +80,7 @@ def main():
     PRINT_INTERVAL_TICKS = max(1, int(PRINT_EVERY_SEC / 0.01))
 
     with mujoco.viewer.launch_passive(model, data) as viewer:
-        def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, act_id=None, cmd=None):
+        def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, act_id=None, cmd=None, realtime=True):
             ctrl_trim_eff = ctrl_trim_.copy()
             if act_id is not None:
                 ctrl_trim_eff[act_id] = cmd
@@ -93,7 +93,8 @@ def main():
                 data.ctrl[:] = u
                 mujoco.mj_step(model, data)
             viewer.sync()
-            time.sleep(max(0.0, model.opt.timestep - 0.0005))
+            if realtime:
+                time.sleep(max(0.0, model.opt.timestep - 0.0005))
 
             tick_counter[0] += 1
             if tick_counter[0] % PRINT_INTERVAL_TICKS == 0:
@@ -135,12 +136,17 @@ def main():
                     K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
                 step(K, qpos_eq, qvel_eq, ctrl_trim)
 
-            print(f"{label} 유지 끝 - K0로 전환, 똑바로 서는 중...")
+            print(f"{label} 유지 끝 - K0로 전환, 똑바로 서는 중... "
+                  f"(별 움직임이 없는 구간이라 빠르게 넘어갑니다)")
             n_stand = int(STAND_T / 0.01)
             for tick in range(n_stand):
                 if not viewer.is_running():
                     return False
-                step(K0, qpos_eq0, qvel_eq0, np.zeros(nu))
+                # 서있기만 하는 구간은 딱히 볼 게 없으니 실시간 재생
+                # 없이 빠르게 넘긴다(그래도 매 틱 viewer.sync()는 하니
+                # 창에는 계속 그려짐) - 60초가 실제로 60초 걸리면
+                # "멈춘 것처럼" 보인다는 사용자 피드백으로 고침.
+                step(K0, qpos_eq0, qvel_eq0, np.zeros(nu), realtime=False)
             return True
 
         if not lean_and_return(a_abduct_R, -1.0, "오른쪽"):
