@@ -68,18 +68,12 @@ def main():
 
     AMP, PERIOD = 3.0, 1.0
 
-    print("=== 흔드는 중 push 세기 스윕 (더 세게) ===")
-    for push in [0.35, 0.4, 0.5, 0.6, 0.8]:
-        fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_abduct_R, a_abduct_L,
-                   AMP, PERIOD, push, 5.0, 20.0)
-        print(f"push={push}m/s: fell={fell}")
-
-    print()
-    print("=== push=0.3m/s, 사이클 내 여러 타이밍 ===")
-    for push_time in [5.0, 5.25, 5.5, 5.75]:
+    print("=== push=0.3m/s, 1초 사이클을 10개 구간으로 세밀하게 ===")
+    for i in range(10):
+        push_time = 5.0 + i * 0.1
         fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_abduct_R, a_abduct_L,
                    AMP, PERIOD, 0.3, push_time, 20.0)
-        print(f"push_time={push_time}s: fell={fell}")
+        print(f"push_time={push_time:.1f}s (위상={i*36}도): fell={fell}")
 
 
 if __name__ == "__main__":
