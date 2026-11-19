@@ -1,16 +1,18 @@
 """view_sway_demo.py
 ---------------------
-오늘(2026-11-19) 검증된 범위 - 오른쪽으로 기울어서 버티다가 중앙
-근처로 돌아오는 것까지 - 를 MuJoCo 뷰어로 보여주는 데모. ROS2 없이
-순수 터미널 + MuJoCo 창만 쓴다.
+오늘(2026-11-19) 검증된 레시피를 MuJoCo 뷰어로 보여주는 데모.
+ROS2 없이 순수 터미널 + MuJoCo 창만 쓴다.
 
-verify_sway2.py에서 검증된 정확한 레시피(램프 -> 5초 정착 -> 1초마다
-재선형화하며 유지 -> 다음 전환은 "실제 달성값"에서 시작)를 그대로
-가져왔다. 3번째 전환(반대쪽으로 더 가는 것)은 아직 불안정해서
-(README의 "다음 단계" 참고) 데모에는 2단계(기울기+복귀)까지만 넣었다.
-
-실행:
-  python view_sway_demo.py
+구조:
+1. 오른쪽으로 기울기(램프 5초 -> 정착 5초, K0 기반 override) -> 그
+   자세를 재선형화하며 10초 유지.
+2. 복귀: "짧게(3초)만 override=0으로 세게 밀면서 매 1초 재선형화"
+   -> 그 다음부터는 override 없이 순수 trim + 계속 재선형화로 계속
+   서있기. (사용자 관찰 - "버그였던 버전이 오히려 중앙에 더
+   가까웠다"에서 착안: 짧게 세게 밀고 나서도 재선형화를 계속
+   이어가면 더 중앙에(~0.4도) 가깝게, 그리고 안정적으로 선다 -
+   원래 버그는 "밀기"는 맞았는데 그 뒤 재선형화를 완전히 멈춘 게
+   문제였다.)
 """
 import math
 import time
@@ -52,8 +54,8 @@ def main():
     RAMP_T = 5.0
     PRE_SETTLE_T = 5.0
     HOLD_T = 10.0
+    PUSH_BACK_T = 3.0
     RELIN_INTERVAL = 1.0
-    targets = [-LEAN_DEG, 0.0]  # 오늘 검증된 범위만
 
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq0
@@ -63,16 +65,15 @@ def main():
     qpos_eq = qpos_eq0.copy()
     qvel_eq = qvel_eq0.copy()
     ctrl_trim = np.zeros(nu)
-    prev_bias = 0.0
 
     print("오른쪽으로 기울기 -> 유지 -> 중앙 근처로 복귀 데모. 창을 닫으면 종료.")
 
     with mujoco.viewer.launch_passive(model, data) as viewer:
         def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd=None, hip_L_cmd=None):
-            # hip_R_cmd/hip_L_cmd가 None이면(hold 단계) override 없이
-            # 순수 trim만 쓴다 - (0.0, 0.0)을 넘기면 "기울기를 강제로
-            # 0으로 지우는" 것과 같아서(오늘 찾은 버그, 사용자가 본
-            # "거의 중앙으로 돌아와서 유지하다 쓰러짐" 증상의 원인).
+            # hip_R_cmd/hip_L_cmd가 None이면 override 없이 순수
+            # trim만 쓴다 - (0.0, 0.0)을 넘기면 "기울기를 강제로
+            # 0으로 지우는" override가 된다(원래는 return 단계에서만
+            # 의도적으로 씀).
             ctrl_trim_eff = ctrl_trim_.copy()
             if hip_R_cmd is not None:
                 ctrl_trim_eff[a_abduct_R] = hip_R_cmd
@@ -89,62 +90,64 @@ def main():
             viewer.sync()
             time.sleep(max(0.0, model.opt.timestep - 0.0005))
 
-        for cycle in range(len(targets)):
+        # === 1) 오른쪽으로 기울기 ===
+        n_ramp = int(RAMP_T / 0.01)
+        for tick in range(n_ramp):
             if not viewer.is_running():
-                break
-            target_bias = math.radians(targets[cycle])
+                return
+            bias = -math.radians(LEAN_DEG) * (tick / n_ramp)
+            step(K, qpos_eq, qvel_eq, ctrl_trim, bias, None)
 
-            n_ramp = int(RAMP_T / 0.01)
-            for tick in range(n_ramp):
-                if not viewer.is_running():
-                    break
-                bias = prev_bias + (target_bias - prev_bias) * (tick / n_ramp)
-                step(K, qpos_eq, qvel_eq, ctrl_trim, min(bias, 0.0), max(bias, 0.0))
+        n_settle = int(PRE_SETTLE_T / 0.01)
+        for tick in range(n_settle):
+            if not viewer.is_running():
+                return
+            step(K, qpos_eq, qvel_eq, ctrl_trim, -math.radians(LEAN_DEG), None)
 
-            n_settle = int(PRE_SETTLE_T / 0.01)
-            for tick in range(n_settle):
-                if not viewer.is_running():
-                    break
-                step(K, qpos_eq, qvel_eq, ctrl_trim, min(target_bias, 0.0), max(target_bias, 0.0))
+        # === 2) 유지 (재선형화) ===
+        qpos_eq = data.qpos.copy()
+        qvel_eq = np.zeros_like(qvel_eq0)
+        ctrl_trim = data.ctrl.copy()
+        K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
+        n_hold = int(HOLD_T / 0.01)
+        for tick in range(n_hold):
+            if not viewer.is_running():
+                return
+            if tick % int(RELIN_INTERVAL / 0.01) == 0:
+                qpos_eq = data.qpos.copy()
+                ctrl_trim = data.ctrl.copy()
+                K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
+            step(K, qpos_eq, qvel_eq, ctrl_trim)
 
-            qpos_eq = data.qpos.copy()
-            qvel_eq = np.zeros_like(qvel_eq0)
-            ctrl_trim = data.ctrl.copy()
-            K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
-            n_hold = int(HOLD_T / 0.01)
-            for tick in range(n_hold):
-                if not viewer.is_running():
-                    break
-                if tick % int(RELIN_INTERVAL / 0.01) == 0:
-                    qpos_eq = data.qpos.copy()
-                    ctrl_trim = data.ctrl.copy()
-                    K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
-                step(K, qpos_eq, qvel_eq, ctrl_trim)
+        print("복귀 시작 - 짧게 밀면서 계속 재선형화...")
 
-            prev_bias = ctrl_trim[a_abduct_R] if ctrl_trim[a_abduct_R] < 0 else ctrl_trim[a_abduct_L]
+        # === 3) 복귀: 짧게(3초)만 override=0으로 밀면서 매 1초 재선형화 ===
+        n_push = int(PUSH_BACK_T / 0.01)
+        for tick in range(n_push):
+            if not viewer.is_running():
+                return
+            if tick % int(RELIN_INTERVAL / 0.01) == 0:
+                qpos_eq = data.qpos.copy()
+                ctrl_trim = data.ctrl.copy()
+                K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
+            step(K, qpos_eq, qvel_eq, ctrl_trim, 0.0, 0.0)
 
         print("데모 끝 - 계속 서있는 모습을 보실 수 있습니다 (창을 닫으면 종료).")
+
+        # === 4) override 끄고 순수 trim + 계속 재선형화로 계속 서있기 ===
+        qpos_eq = data.qpos.copy()
+        qvel_eq = np.zeros_like(qvel_eq0)
+        ctrl_trim = data.ctrl.copy()
+        K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
         hold_tick = 0
         while viewer.is_running():
-            # 여기서도 1초마다 계속 재선형화해야 한다 - K를 한 번
-            # 정한 채로 오래 고정해두면(여기선 "계속") 그 자체가
-            # 서서히 발산한다(오늘 15초 램프 테스트에서 겪은 것과
-            # 같은 버그 - 데모 마지막 루프에 깜빡하고 안 넣었었다).
             if hold_tick % int(RELIN_INTERVAL / 0.01) == 0:
                 qpos_eq = data.qpos.copy()
                 qvel_eq = np.zeros_like(qvel_eq0)
                 ctrl_trim = data.ctrl.copy()
                 K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
             hold_tick += 1
-            dq = np.zeros(nv)
-            mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
-            dv = data.qvel - qvel_eq
-            x = np.concatenate([dq, dv])
-            u = np.clip(ctrl_trim - K @ x, -ctrl_limits, ctrl_limits)
-            data.ctrl[:] = u
-            mujoco.mj_step(model, data)
-            viewer.sync()
-            time.sleep(max(0.0, model.opt.timestep - 0.0005))
+            step(K, qpos_eq, qvel_eq, ctrl_trim)
 
 
 if __name__ == "__main__":
