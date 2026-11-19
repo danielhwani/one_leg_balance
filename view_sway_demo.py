@@ -54,6 +54,8 @@ def main():
 
     a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
     a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
 
     LEAN_DEG = 10.0  # K0 자체 범위(±3~4도) 안에 들어오도록 작게
     RAMP_T = 5.0
@@ -73,6 +75,10 @@ def main():
     print("오른쪽 -> 왼쪽으로 번갈아 살짝(10도) 기울기 -> 유지 -> K0로 "
           "똑바로 서기 데모. 창을 닫으면 종료.")
 
+    tick_counter = [0]
+    PRINT_EVERY_SEC = 1.0
+    PRINT_INTERVAL_TICKS = max(1, int(PRINT_EVERY_SEC / 0.01))
+
     with mujoco.viewer.launch_passive(model, data) as viewer:
         def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, act_id=None, cmd=None):
             ctrl_trim_eff = ctrl_trim_.copy()
@@ -88,6 +94,12 @@ def main():
                 mujoco.mj_step(model, data)
             viewer.sync()
             time.sleep(max(0.0, model.opt.timestep - 0.0005))
+
+            tick_counter[0] += 1
+            if tick_counter[0] % PRINT_INTERVAL_TICKS == 0:
+                print(f"    t={data.time:6.2f}s  기울기={common.tilt_deg(data.qpos):5.2f}도  "
+                      f"엉덩이R={math.degrees(data.qpos[qadr_R]):+6.2f}도  "
+                      f"엉덩이L={math.degrees(data.qpos[qadr_L]):+6.2f}도")
 
         def lean_and_return(act_id, sign, label):
             """sign=-1 -> 오른쪽(hip_abduct_R, 음수가 오른쪽 체중이동),
