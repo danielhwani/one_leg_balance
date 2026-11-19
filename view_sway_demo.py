@@ -68,10 +68,16 @@ def main():
     print("오른쪽으로 기울기 -> 유지 -> 중앙 근처로 복귀 데모. 창을 닫으면 종료.")
 
     with mujoco.viewer.launch_passive(model, data) as viewer:
-        def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd, hip_L_cmd):
+        def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd=None, hip_L_cmd=None):
+            # hip_R_cmd/hip_L_cmd가 None이면(hold 단계) override 없이
+            # 순수 trim만 쓴다 - (0.0, 0.0)을 넘기면 "기울기를 강제로
+            # 0으로 지우는" 것과 같아서(오늘 찾은 버그, 사용자가 본
+            # "거의 중앙으로 돌아와서 유지하다 쓰러짐" 증상의 원인).
             ctrl_trim_eff = ctrl_trim_.copy()
-            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
-            ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+            if hip_R_cmd is not None:
+                ctrl_trim_eff[a_abduct_R] = hip_R_cmd
+            if hip_L_cmd is not None:
+                ctrl_trim_eff[a_abduct_L] = hip_L_cmd
             for _ in range(2):
                 dq = np.zeros(nv)
                 mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq_, data.qpos)
@@ -113,12 +119,23 @@ def main():
                     qpos_eq = data.qpos.copy()
                     ctrl_trim = data.ctrl.copy()
                     K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
-                step(K, qpos_eq, qvel_eq, ctrl_trim, 0.0, 0.0)
+                step(K, qpos_eq, qvel_eq, ctrl_trim)
 
             prev_bias = ctrl_trim[a_abduct_R] if ctrl_trim[a_abduct_R] < 0 else ctrl_trim[a_abduct_L]
 
         print("데모 끝 - 계속 서있는 모습을 보실 수 있습니다 (창을 닫으면 종료).")
+        hold_tick = 0
         while viewer.is_running():
+            # 여기서도 1초마다 계속 재선형화해야 한다 - K를 한 번
+            # 정한 채로 오래 고정해두면(여기선 "계속") 그 자체가
+            # 서서히 발산한다(오늘 15초 램프 테스트에서 겪은 것과
+            # 같은 버그 - 데모 마지막 루프에 깜빡하고 안 넣었었다).
+            if hold_tick % int(RELIN_INTERVAL / 0.01) == 0:
+                qpos_eq = data.qpos.copy()
+                qvel_eq = np.zeros_like(qvel_eq0)
+                ctrl_trim = data.ctrl.copy()
+                K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
+            hold_tick += 1
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
             dv = data.qvel - qvel_eq
