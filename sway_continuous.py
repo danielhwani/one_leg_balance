@@ -61,9 +61,9 @@ def main():
     a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
     a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
-    print("=== amp=4deg period=6s, 120초 장시간 검증 ===")
+    print("=== amp=3deg period=1.0s(걸음걸이 수준), 150초 장시간 검증 ===")
     fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_abduct_R, a_abduct_L,
-               4.0, 6.0, 150.0, verbose=True)
+               3.0, 1.0, 150.0, verbose=True)
     print(f"fell={fell}")
 
 

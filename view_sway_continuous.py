@@ -36,8 +36,8 @@ def main():
     qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
     qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
 
-    AMPLITUDE_DEG = 4.0  # K0 범위(±3~4도) 안에서만
-    PERIOD_S = 6.0  # 한 바퀴(오른쪽->왼쪽->오른쪽) 걸리는 시간
+    AMPLITUDE_DEG = 3.0  # K0 범위(±3~4도) 안에서만
+    PERIOD_S = 1.0  # 실제 걸음걸이 수준 속도(150초 검증됨)
 
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq0
