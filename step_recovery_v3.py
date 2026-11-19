@@ -32,9 +32,13 @@ def relinearize_at(model, qpos, ctrl, Q, R):
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
         a_abduct_R, a_hip_L, a_knee_L, a_ankle_pitch_L,
-        weight_shift_deg, ramp_t, pre_settle_t,
+        weight_shift_deg, shift_lead_s,
         step_duration_s, lift_knee_deg, land_knee_deg, hip_target_deg,
         relin_interval=0.5, duration_s=20.0, verbose=False):
+    """사람처럼: 체중이동과 스윙을 겹쳐서(동시에) 진행한다.
+    shift_lead_s만큼 체중이동이 스윙보다 먼저 시작하되(0이면 완전
+    동시), 둘 다 step_duration_s 안에서 끝난다 - 미리 멈춰서 기다리는
+    단계(투수의 와인드업 같은) 없음."""
     nv = model.nv
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq0
@@ -42,7 +46,9 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
     mujoco.mj_forward(model, data)
     fell = None
 
-    step_t0 = ramp_t + pre_settle_t
+    step_t0 = 1.0  # 잠깐 정지 확인 후 바로 시작
+    shift_t0 = step_t0 - shift_lead_s
+    shift_duration_s = step_duration_s + shift_lead_s
     stepping = False
     landed = False
     ticks_since_land = 0
@@ -53,7 +59,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
         if not stepping and not landed and data.time >= step_t0:
             stepping = True
             if verbose:
-                print(f"  >>> t={data.time:.2f} 왼발 스윙 시작")
+                print(f"  >>> t={data.time:.2f} 왼발 스윙 시작(체중이동과 겹침)")
 
         if landed and ticks_since_land % int(relin_interval / 0.01) == 0:
             qpos_eq = data.qpos.copy()
@@ -70,8 +76,8 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
             x = np.concatenate([dq, dv])
             u = ctrl_trim - K @ x
 
-            if not landed:
-                s_shift = min(1.0, data.time / ramp_t)
+            if not landed and data.time >= shift_t0:
+                s_shift = min(1.0, (data.time - shift_t0) / shift_duration_s)
                 u[a_abduct_R] += math.radians(weight_shift_deg) * s_shift
 
             if stepping:
@@ -118,16 +124,16 @@ def main():
     a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
     a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
 
-    print("=== 체중이동 세기 x 스윙 파라미터 스윕 ===")
-    for weight_shift in [-10, -20, -30]:
-        for step_dur in [0.5, 1.0, 2.0]:
-            for lift_knee in [10, 20]:
+    print("=== 체중이동+스윙을 겹쳐서(동시 진행) 시도 ===")
+    for weight_shift in [-10, -20]:
+        for shift_lead in [0.0, 0.3, 0.6]:
+            for step_dur in [0.5, 1.0, 1.5]:
                 fell = run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                            a_abduct_R, a_hip_L, a_knee_L, a_ankle_pitch_L,
-                           weight_shift_deg=weight_shift, ramp_t=5.0, pre_settle_t=5.0,
-                           step_duration_s=step_dur, lift_knee_deg=lift_knee, land_knee_deg=5.0, hip_target_deg=-5.0,
+                           weight_shift_deg=weight_shift, shift_lead_s=shift_lead,
+                           step_duration_s=step_dur, lift_knee_deg=15.0, land_knee_deg=5.0, hip_target_deg=-10.0,
                            duration_s=20.0)
-                print(f"shift={weight_shift} step_dur={step_dur} lift_knee={lift_knee}: fell={fell}")
+                print(f"shift={weight_shift} lead={shift_lead} step_dur={step_dur}: fell={fell}")
 
 
 if __name__ == "__main__":
