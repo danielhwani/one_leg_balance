@@ -1,0 +1,16 @@
+sanity check (theta1=0): P0 vs 실제 torso pos [-3.10817128e-04 -1.11022302e-16  1.89923860e+00] [-3.10817128e-04 -4.53278934e-18  1.89923860e+00]
+  quat: [9.99999997e-01 1.62644428e-18 7.69863783e-05 2.11717498e-19] vs [9.99999997e-01 6.83006028e-19 7.69863783e-05 2.11790130e-19]
+
+전체 몸무게(N): 246.33 (한 발 평형이면 fz_R이 이 값 근처여야 함)
+
+=== 1차: theta1 스윕 (waist_roll=0, waist_pitch=0) ===
+1차 최적: theta1=-19.0 |qacc_free|=8.610 fz_R=57.55
+
+=== 2차: best theta1 주변 + waist_roll 2D 스윕 ===
+2차 최적: theta1=-14.0 waist_roll_delta=-8.0 |qacc_free|=5.595 fz_R=91.49
+  qacc_free 분해(lin xyz, ang xyz): [ 0.39199557 -2.86246833 -0.93437798  0.99244566  4.22806091 -1.79574032]
+
+=== 3차: best2 주변 + waist_pitch 3D 스윕 ===
+3차 최적: theta1=-12.0 waist_roll_delta=-10.0 waist_pitch_delta=3.0 |qacc_free|=3.379 fz_R=105.68
+  qacc_free 분해(lin xyz, ang xyz): [-0.42551238 -3.17695283 -0.99351825  0.19879658  0.32013539 -0.12052629]
+저장: best_one_leg_qpos.npy

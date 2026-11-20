@@ -1,0 +1,87 @@
+  dz=+0.0000: |qacc[:6]|=0.1759
+  dz=-0.0003: |qacc[:6]|=1.7213
+  dz=-0.0007: |qacc[:6]|=3.3663
+  dz=-0.0012: |qacc[:6]|=5.4074
+  dz=-0.0020: |qacc[:6]|=8.6755
+  dz=-0.0040: |qacc[:6]|=16.8571
+  dz=-0.0080: |qacc[:6]|=33.2667
+선택: dz=0.0 |qacc[:6]|=0.1759
+선형화 지점 확인: |qacc[:6]|=0.1759
+K1 계산 완료
+
+=== 기본 K1 (두 발 서있기 Q/R 그대로) ===
+  [K1_base] t=0.01 tilt=8.54 |v|=0.0105 n_sat=0
+  [K1_base] t=0.11 tilt=8.48 |v|=0.0534 n_sat=0
+  [K1_base] t=0.21 tilt=8.52 |v|=0.0725 n_sat=0
+  [K1_base] t=0.31 tilt=9.45 |v|=0.5095 n_sat=6
+  [K1_base] t=0.41 tilt=13.57 |v|=0.5098 n_sat=2
+  [K1_base] t=0.51 tilt=19.85 |v|=0.7460 n_sat=7
+  [K1_base] t=0.61 tilt=25.68 |v|=0.7211 n_sat=8
+  [K1_base] t=0.71 tilt=28.56 |v|=0.7816 n_sat=7
+  [K1_base] t=0.81 tilt=30.78 |v|=1.0255 n_sat=9
+  [K1_base] t=0.91 tilt=33.11 |v|=0.6374 n_sat=8
+  [K1_base] t=1.01 tilt=35.81 |v|=1.3575 n_sat=7
+  [K1_base] t=1.11 tilt=41.85 |v|=2.0197 n_sat=9
+  [K1_base] t=1.21 tilt=51.49 |v|=2.3551 n_sat=11
+[K1_base] 쓰러짐: t=1.25
+
+=== Q를 더 강하게(자세/각속도 가중 10배) 한 K2 ===
+  [K2_Q10x] t=0.01 tilt=8.54 |v|=0.0105 n_sat=0
+  [K2_Q10x] t=0.11 tilt=8.26 |v|=0.1801 n_sat=0
+  [K2_Q10x] t=0.21 tilt=9.12 |v|=0.3255 n_sat=7
+  [K2_Q10x] t=0.31 tilt=8.58 |v|=0.4966 n_sat=9
+  [K2_Q10x] t=0.41 tilt=6.00 |v|=0.2934 n_sat=6
+  [K2_Q10x] t=0.51 tilt=2.38 |v|=0.2299 n_sat=6
+  [K2_Q10x] t=0.61 tilt=2.28 |v|=0.4180 n_sat=5
+  [K2_Q10x] t=0.71 tilt=6.37 |v|=0.5403 n_sat=5
+  [K2_Q10x] t=0.81 tilt=12.71 |v|=0.5601 n_sat=8
+  [K2_Q10x] t=0.91 tilt=18.72 |v|=0.7804 n_sat=12
+  [K2_Q10x] t=1.01 tilt=26.33 |v|=0.8681 n_sat=10
+  [K2_Q10x] t=1.11 tilt=36.43 |v|=1.3140 n_sat=12
+  [K2_Q10x] t=1.21 tilt=46.69 |v|=1.8002 n_sat=15
+  [K2_Q10x] t=1.31 tilt=52.26 |v|=2.5285 n_sat=10
+[K2_Q10x] 쓰러짐: t=1.39
+
+=== Q를 100배 한 K3 ===
+  [K3_Q100x] t=0.01 tilt=8.54 |v|=0.0105 n_sat=0
+  [K3_Q100x] t=0.11 tilt=8.13 |v|=0.3182 n_sat=10
+  [K3_Q100x] t=0.21 tilt=8.47 |v|=0.1719 n_sat=7
+  [K3_Q100x] t=0.31 tilt=8.35 |v|=0.2823 n_sat=9
+  [K3_Q100x] t=0.41 tilt=10.35 |v|=0.3185 n_sat=9
+  [K3_Q100x] t=0.51 tilt=12.35 |v|=0.3783 n_sat=9
+  [K3_Q100x] t=0.61 tilt=17.03 |v|=0.4717 n_sat=10
+  [K3_Q100x] t=0.71 tilt=24.96 |v|=0.5007 n_sat=11
+  [K3_Q100x] t=0.81 tilt=26.29 |v|=0.0999 n_sat=12
+  [K3_Q100x] t=0.91 tilt=27.15 |v|=0.2641 n_sat=12
+  [K3_Q100x] t=1.01 tilt=28.80 |v|=1.1141 n_sat=15
+  [K3_Q100x] t=1.11 tilt=31.48 |v|=1.0955 n_sat=14
+  [K3_Q100x] t=1.21 tilt=34.84 |v|=1.4502 n_sat=15
+  [K3_Q100x] t=1.31 tilt=39.51 |v|=1.8180 n_sat=14
+  [K3_Q100x] t=1.41 tilt=45.79 |v|=2.3539 n_sat=14
+  [K3_Q100x] t=1.51 tilt=54.83 |v|=3.1064 n_sat=15
+[K3_Q100x] 쓰러짐: t=1.52
+
+=== 액추에이터 한계를 풀어서(±80도) K1로 재시도 - 포화가 진짜 원인인지 진단 ===
+  [K1_limit80] t=0.01 tilt=8.54 |v|=0.0105 n_sat=0
+  [K1_limit80] t=0.11 tilt=8.48 |v|=0.0534 n_sat=0
+  [K1_limit80] t=0.21 tilt=8.52 |v|=0.0725 n_sat=0
+  [K1_limit80] t=0.31 tilt=9.84 |v|=1.1730 n_sat=2
+  [K1_limit80] t=0.41 tilt=10.23 |v|=1.0255 n_sat=3
+  [K1_limit80] t=0.51 tilt=7.11 |v|=1.0519 n_sat=3
+  [K1_limit80] t=0.61 tilt=10.39 |v|=1.7985 n_sat=7
+  [K1_limit80] t=0.71 tilt=22.02 |v|=1.0192 n_sat=8
+  [K1_limit80] t=0.81 tilt=34.86 |v|=1.9288 n_sat=7
+  [K1_limit80] t=0.91 tilt=52.95 |v|=3.3391 n_sat=9
+[K1_limit80] 쓰러짐: t=0.93
+
+=== 한계 없음(거의 무제한, ±300도)으로 K1 재시도 ===
+  [K1_nolimit] t=0.01 tilt=8.54 |v|=0.0105 n_sat=0
+  [K1_nolimit] t=0.11 tilt=8.48 |v|=0.0534 n_sat=0
+  [K1_nolimit] t=0.21 tilt=8.52 |v|=0.0725 n_sat=0
+  [K1_nolimit] t=0.31 tilt=10.94 |v|=1.9458 n_sat=0
+  [K1_nolimit] t=0.41 tilt=13.73 |v|=4.0367 n_sat=5
+  [K1_nolimit] t=0.51 tilt=16.28 |v|=3.7466 n_sat=3
+  [K1_nolimit] t=0.61 tilt=12.37 |v|=4.0287 n_sat=6
+  [K1_nolimit] t=0.71 tilt=16.70 |v|=3.1050 n_sat=8
+  [K1_nolimit] t=0.81 tilt=39.46 |v|=2.0765 n_sat=4
+[K1_nolimit] 쓰러짐: t=0.88

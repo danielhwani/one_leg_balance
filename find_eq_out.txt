@@ -1,0 +1,22 @@
+=== 한 발 지지 평형점 탐색 (상수 ctrl, 3초 시뮬레이션) ===
+lean= 10 knee_L= 25: fz_L_final= 111.66 lifted=False tilt_final= 60.11 max_tilt= 60.11 |v|=3.0329
+lean= 10 knee_L= 35: fz_L_final=  75.20 lifted=False tilt_final= 60.05 max_tilt= 60.05 |v|=3.2227
+lean= 10 knee_L= 45: fz_L_final=  97.35 lifted=False tilt_final= 60.40 max_tilt= 60.40 |v|=2.8493
+lean= 15 knee_L= 25: fz_L_final=  53.43 lifted=False tilt_final= 60.28 max_tilt= 60.28 |v|=3.4427
+lean= 15 knee_L= 35: fz_L_final=  55.69 lifted=False tilt_final= 60.32 max_tilt= 60.32 |v|=3.4113
+lean= 15 knee_L= 45: fz_L_final= 165.22 lifted=False tilt_final= 60.25 max_tilt= 60.25 |v|=2.9042
+lean= 20 knee_L= 25: fz_L_final=  57.62 lifted=False tilt_final= 60.14 max_tilt= 60.14 |v|=3.4227
+lean= 20 knee_L= 35: fz_L_final=  56.69 lifted=False tilt_final= 60.18 max_tilt= 60.18 |v|=3.4976
+lean= 20 knee_L= 45: fz_L_final=   7.58 lifted=False tilt_final= 60.16 max_tilt= 60.16 |v|=2.8539
+lean= 25 knee_L= 25: fz_L_final=  37.39 lifted=False tilt_final= 60.36 max_tilt= 60.36 |v|=3.4713
+lean= 25 knee_L= 35: fz_L_final=  90.14 lifted=False tilt_final= 60.14 max_tilt= 60.14 |v|=3.1583
+lean= 25 knee_L= 45: fz_L_final=  31.49 lifted=False tilt_final= 60.10 max_tilt= 60.10 |v|=2.7742
+lean= 30 knee_L= 25: fz_L_final=  36.82 lifted=False tilt_final= 60.50 max_tilt= 60.50 |v|=3.5676
+lean= 30 knee_L= 35: fz_L_final=  97.54 lifted=False tilt_final= 60.29 max_tilt= 60.29 |v|=2.9888
+lean= 30 knee_L= 45: fz_L_final= 155.93 lifted=False tilt_final= 60.27 max_tilt= 60.27 |v|=2.5459
+lean= 35 knee_L= 25: fz_L_final=  41.70 lifted=False tilt_final= 60.27 max_tilt= 60.27 |v|=3.3722
+lean= 35 knee_L= 35: fz_L_final=   0.00 lifted=True tilt_final= 60.21 max_tilt= 60.21 |v|=3.2555
+lean= 35 knee_L= 45: fz_L_final= 184.97 lifted=False tilt_final= 60.07 max_tilt= 60.07 |v|=1.9126
+
+=== 최적 후보 ===
+(92.76635707402724, 35, 35, -35, 0.0, 0.0, 60.21111011495487, 60.21111011495487, 3.255524695907236)
