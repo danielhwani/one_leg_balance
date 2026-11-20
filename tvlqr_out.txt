@@ -1,0 +1,33 @@
+qpos_eq1에서 foot_L z=0.8548, foot_R z=-0.0008
+웨이포인트별 선형화 중...
+41개 웨이포인트 선형화 완료
+역방향 Riccati 재귀로 K(t) 계산 중...
+TV-LQR 게인 계산 완료
+
+=== TV-LQR로 standing -> one-leg 전이 (왼발 충돌 켠 채로) ===
+  [tvlqr] t=0.01 tilt=  0.01 |v|=0.0007
+  [tvlqr] t=0.11 tilt=  0.02 |v|=0.0065
+  [tvlqr] t=0.21 tilt=  0.04 |v|=0.0032
+  [tvlqr] t=0.31 tilt=  0.01 |v|=0.0084
+  [tvlqr] t=0.41 tilt=  0.01 |v|=0.0101
+  [tvlqr] t=0.51 tilt=  0.01 |v|=0.0126
+  [tvlqr] t=0.61 tilt=  0.02 |v|=0.0137
+  [tvlqr] t=0.71 tilt=  0.02 |v|=0.0178
+  [tvlqr] t=0.81 tilt=  0.03 |v|=0.0201
+  [tvlqr] t=0.91 tilt=  0.05 |v|=0.0280
+  [tvlqr] t=1.01 tilt=  0.17 |v|=0.0446
+  [tvlqr] t=1.11 tilt=  0.37 |v|=0.3651
+  [tvlqr] t=1.21 tilt=  3.01 |v|=0.5117
+  [tvlqr] t=1.31 tilt=  6.33 |v|=0.3470
+  [tvlqr] t=1.41 tilt=  9.03 |v|=0.6704
+  [tvlqr] t=1.51 tilt=  8.05 |v|=0.5314
+  [tvlqr] t=1.61 tilt=  7.91 |v|=0.5182
+  [tvlqr] t=1.71 tilt= 11.04 |v|=0.4491
+  [tvlqr] t=1.81 tilt=  9.11 |v|=0.9295
+  [tvlqr] t=1.91 tilt=  6.68 |v|=1.7990
+  [tvlqr] t=2.01 tilt= 11.15 |v|=2.6317
+  [tvlqr] t=2.11 tilt= 18.25 |v|=2.6828
+  [tvlqr] t=2.21 tilt= 28.67 |v|=2.5770
+  [tvlqr] t=2.31 tilt= 39.01 |v|=3.0713
+  [tvlqr] t=2.41 tilt= 54.07 |v|=3.8358
+[tvlqr] 쓰러짐: t=2.42

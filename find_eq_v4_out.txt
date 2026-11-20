@@ -1,0 +1,48 @@
+=== 가우스-뉴턴(백트래킹) - 왼다리 고정, theta1/waist 3개만 최적화 ===
+시작: |qacc_free|=18.2331
+iter 0: |qacc_free|= 15.31647 scale=0.031 p=[-7.834  4.153  0.616]
+iter 1: |qacc_free|= 12.84169 scale=0.500 p=[10.211  2.878  4.225]
+iter 2: |qacc_free|=  6.64195 scale=0.500 p=[21.191  4.4    1.22 ]
+iter 3: |qacc_free|=  4.89450 scale=0.250 p=[24.348  4.444  0.371]
+iter 4: |qacc_free|=  6.70361 scale=0.016 p=[25.214  4.666  0.402]
+iter 5: |qacc_free|=  3.29886 scale=1.000 p=[ 25.384 -17.277  -3.391]
+iter 6: |qacc_free|=  1.21041 scale=1.000 p=[ 25.394 -17.372  -0.179]
+iter 7: |qacc_free|=  0.76082 scale=1.000 p=[ 25.51  -19.406   0.343]
+iter 8: |qacc_free|=  0.70997 scale=1.000 p=[ 2.5488e+01 -1.8855e+01 -4.0000e-03]
+iter 9: |qacc_free|=  0.58029 scale=1.000 p=[ 25.482 -18.844   0.182]
+iter 10: |qacc_free|=  0.58030 scale=0.016 p=[ 25.482 -18.843   0.182]
+iter 11: |qacc_free|=  0.58031 scale=0.016 p=[ 25.482 -18.843   0.182]
+iter 12: |qacc_free|=  0.58032 scale=0.016 p=[ 25.482 -18.843   0.182]
+iter 13: |qacc_free|=  0.58033 scale=0.016 p=[ 25.482 -18.843   0.181]
+iter 14: |qacc_free|=  0.58034 scale=0.016 p=[ 25.482 -18.842   0.181]
+iter 15: |qacc_free|=  0.58035 scale=0.016 p=[ 25.482 -18.842   0.181]
+iter 16: |qacc_free|=  0.58036 scale=0.016 p=[ 25.482 -18.842   0.181]
+iter 17: |qacc_free|=  0.58037 scale=0.016 p=[ 25.482 -18.842   0.181]
+iter 18: |qacc_free|=  0.58037 scale=0.016 p=[ 25.482 -18.842   0.181]
+iter 19: |qacc_free|=  0.58038 scale=0.016 p=[ 25.482 -18.841   0.181]
+iter 20: |qacc_free|=  0.58039 scale=0.016 p=[ 25.482 -18.841   0.181]
+iter 21: |qacc_free|=  0.58040 scale=0.016 p=[ 25.482 -18.841   0.181]
+iter 22: |qacc_free|=  0.58041 scale=0.016 p=[ 25.482 -18.841   0.18 ]
+iter 23: |qacc_free|=  0.58042 scale=0.016 p=[ 25.482 -18.841   0.18 ]
+iter 24: |qacc_free|=  0.58042 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+iter 25: |qacc_free|=  0.58043 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+iter 26: |qacc_free|=  0.58044 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+iter 27: |qacc_free|=  0.58045 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+iter 28: |qacc_free|=  0.58045 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+iter 29: |qacc_free|=  0.58046 scale=0.016 p=[ 25.482 -18.84    0.18 ]
+
+최종: p=[ 25.48217138 -18.83966631   0.1798805 ]
+|qacc_free|=0.58046
+fz_L=0.00 fz_R=87.18 (전체 몸무게=246.33)
+저장: best_one_leg_qpos_v4.npy
+
+=== 충돌을 다시 켠 채로 실제 클리어런스 검증 ===
+충돌 켠 상태 fz_L=0.00 (0이어야 진짜 한 발 지지)
+foot_L body z=0.8548, foot_L geom z=0.8297
+  contact: world - shin_R dist=-0.0008
+  contact: world - foot_R dist=-0.0009
+  contact: world - foot_R dist=-0.0006
+  contact: world - foot_R dist=-0.0009
+  contact: world - foot_R dist=-0.0006
+  contact: forearm_R - torso dist=-0.1083
+  contact: hand_R - torso dist=-0.1367
