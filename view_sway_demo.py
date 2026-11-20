@@ -3,7 +3,7 @@
 오늘(2026-11-19) 최종적으로 찾은 가장 깨끗한 레시피를 MuJoCo 뷰어로
 보여주는 데모. ROS2 없이 순수 터미널 + MuJoCo 창만 쓴다.
 
-핵심 발견: K0(원래 두 발 서있기 LQR)는 hip_abduct_R/L 오프셋
+핵심 발견: K0(원래 두 발 서있기 LQR)는 hip_abduct_L/L 오프셋
 ±3~4도, 전진 push 0.25m/s까지는 "그냥 그대로" 잘 버틴다
 (`compare_offset_vs_push.py`, `check_left_basin.py`로 검증). 그러니
 기울기 목표를 20도가 아니라 **10도**로 잡으면, 기울고 유지한 뒤
@@ -52,16 +52,16 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
-    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
     LEAN_DEG = 10.0  # K0 자체 범위(±3~4도) 안에 들어오도록 작게
     RAMP_T = 5.0
     PRE_SETTLE_T = 5.0
     HOLD_T = 10.0
-    # 양쪽 기울기 사이 K0로 똑바로 서있는 구간 - 반대쪽 다리(hip_L
+    # 양쪽 기울기 사이 K0로 똑바로 서있는 구간 - 반대쪽 다리(hip_R
     # 등)에 남은 잔여 오프셋이 다음 기울기 전에 충분히 가라앉을
     # 시간이 필요하다(8초/30초는 부족해서 두 번째 기울기가 쓰러짐 -
     # 오늘 찾은 버그, README 참고). 60초는 검증됨.
@@ -103,8 +103,8 @@ def main():
                       f"엉덩이L={math.degrees(data.qpos[qadr_L]):+6.2f}도")
 
         def lean_and_return(act_id, sign, label):
-            """sign=-1 -> 오른쪽(hip_abduct_R, 음수가 오른쪽 체중이동),
-            sign=+1 -> 왼쪽(hip_abduct_L, 양수가 왼쪽 체중이동)."""
+            """sign=-1 -> 오른쪽(hip_abduct_L, 음수가 오른쪽 체중이동),
+            sign=+1 -> 왼쪽(hip_abduct_R, 양수가 왼쪽 체중이동)."""
             K, qpos_eq, qvel_eq, ctrl_trim = K0, qpos_eq0, qvel_eq0, np.zeros(nu)
 
             print(f"{label}으로 기울기...")

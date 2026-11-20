@@ -9,13 +9,13 @@ import common
 def main():
     model = common.load_model()
     qpos_eq, qvel_eq = common.find_equilibrium(model)
-    act_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    act_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
-    foot_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    foot_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
     data0 = mujoco.MjData(model)
     data0.qpos[:] = qpos_eq
     mujoco.mj_forward(model, data0)
-    print("foot_R y 범위 참고:", data0.xpos[foot_R][1] - 0.10, "~", data0.xpos[foot_R][1] + 0.10)
+    print("foot_L y 범위 참고:", data0.xpos[foot_L][1] - 0.10, "~", data0.xpos[foot_L][1] + 0.10)
     print()
 
     for deg in [-5, -5.5, -6, -6.5, -7, -7.5, -8]:

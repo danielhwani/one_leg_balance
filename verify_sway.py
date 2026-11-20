@@ -29,10 +29,10 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
-    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
     LEAN_DEG = 20.0
     RAMP_T = 5.0
@@ -61,26 +61,26 @@ def main():
         for tick in range(n_ramp):
             s = tick / n_ramp
             bias = prev_bias + (target_bias - prev_bias) * s
-            hip_R_cmd = min(bias, 0.0)
-            hip_L_cmd = max(bias, 0.0)
+            hip_L_cmd = min(bias, 0.0)
+            hip_R_cmd = max(bias, 0.0)
             # 램프 중인 두 관절은 기준점(qpos_eq)도 같이 움직여줘야
             # K가 "이 관절이 많이 틀어졌다"고 오해해서 큰 교정을
             #걸지 않는다 - 나머지 관절(몸통/다른 다리 등)은 그대로
             # 고정된 기준을 쓴다.
             qpos_eq_ramp = qpos_eq.copy()
-            qpos_eq_ramp[qadr_R] = hip_R_cmd
-            qpos_eq_ramp[qadr_L] = hip_L_cmd
+            qpos_eq_ramp[qadr_R] = hip_L_cmd
+            qpos_eq_ramp[qadr_L] = hip_R_cmd
             for _ in range(2):
                 dq = np.zeros(nv)
                 mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq_ramp, data.qpos)
                 dv = data.qvel - qvel_eq
                 x = np.concatenate([dq, dv])
-                # trim에서 hip_abduct_R/L 두 칸은 "더하기"가 아니라
+                # trim에서 hip_abduct_L/L 두 칸은 "더하기"가 아니라
                 # 절대값으로 덮어써야 한다(이전 holding 구간의 값이
                 # 이미 trim에 들어있어서, 더하면 이중으로 세게 됨).
                 ctrl_trim_eff = ctrl_trim.copy()
-                ctrl_trim_eff[a_abduct_R] = hip_R_cmd
-                ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+                ctrl_trim_eff[a_abduct_R] = hip_L_cmd
+                ctrl_trim_eff[a_abduct_L] = hip_R_cmd
                 u = ctrl_trim_eff - K @ x
                 u = np.clip(u, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u

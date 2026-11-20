@@ -42,8 +42,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
 
     LEAN_DEG = 20.0
     RAMP_T = 5.0
@@ -58,11 +58,11 @@ def main():
 
     fell = None
 
-    def step_with(K, qpos_eq, qvel_eq, ctrl_trim_base, hip_R_cmd, hip_L_cmd):
+    def step_with(K, qpos_eq, qvel_eq, ctrl_trim_base, hip_L_cmd, hip_R_cmd):
         nonlocal fell
         ctrl_trim_eff = ctrl_trim_base.copy()
-        ctrl_trim_eff[a_abduct_R] = hip_R_cmd
-        ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+        ctrl_trim_eff[a_abduct_R] = hip_L_cmd
+        ctrl_trim_eff[a_abduct_L] = hip_R_cmd
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
@@ -139,10 +139,10 @@ def main():
         qpos_lean = data.qpos.copy()
         for tick in range(n_ramp):
             s = tick / n_ramp
-            hip_R_cmd = start_R * (1 - s)
-            hip_L_cmd = start_L * (1 - s)
+            hip_L_cmd = start_R * (1 - s)
+            hip_R_cmd = start_L * (1 - s)
             qpos_eq_blend = qpos_lean * (1 - s) + qpos_eq0 * s
-            step_with(K0, qpos_eq_blend, qvel_eq0, np.zeros(nu), hip_R_cmd, hip_L_cmd)
+            step_with(K0, qpos_eq_blend, qvel_eq0, np.zeros(nu), hip_L_cmd, hip_R_cmd)
             if tick % 50 == 0:
                 zx, zy = common.contact_zmp(model, data)
                 print(f"    [복귀ramp] t={data.time:.2f} s={s:.2f} tilt={common.tilt_deg(data.qpos):.2f} "

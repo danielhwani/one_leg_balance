@@ -30,10 +30,10 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
-    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
     AMPLITUDE_DEG = 3.0
     PERIOD_S = 1.0
@@ -76,8 +76,8 @@ def main():
                 pending_push[:] = 0.0
 
             bias = math.radians(AMPLITUDE_DEG * math.sin(2 * math.pi * data.time / PERIOD_S))
-            hip_R_cmd = min(bias, 0.0)
-            hip_L_cmd = max(bias, 0.0)
+            hip_L_cmd = min(bias, 0.0)
+            hip_R_cmd = max(bias, 0.0)
 
             for _ in range(2):
                 dq = np.zeros(nv)
@@ -85,8 +85,8 @@ def main():
                 dv = data.qvel - qvel_eq0
                 x = np.concatenate([dq, dv])
                 u = -K0 @ x
-                u[a_abduct_R] = hip_R_cmd
-                u[a_abduct_L] = hip_L_cmd
+                u[a_abduct_R] = hip_L_cmd
+                u[a_abduct_L] = hip_R_cmd
                 u = np.clip(u, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u
                 mujoco.mj_step(model, data)

@@ -37,9 +37,9 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
 
     LEAN_DEG = 10.0
     RAMP_T = 5.0
@@ -53,13 +53,13 @@ def main():
     data.qvel[:] = qvel_eq0
     fell = None
 
-    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd=None, hip_L_cmd=None):
+    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_L_cmd=None, hip_R_cmd=None):
         nonlocal fell
         ctrl_trim_eff = ctrl_trim_.copy()
-        if hip_R_cmd is not None:
-            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
         if hip_L_cmd is not None:
-            ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+            ctrl_trim_eff[a_abduct_R] = hip_L_cmd
+        if hip_R_cmd is not None:
+            ctrl_trim_eff[a_abduct_L] = hip_R_cmd
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq_, data.qpos)
@@ -90,7 +90,7 @@ def main():
 
     zx, zy = common.contact_zmp(model, data)
     print(f"ramp+presettle 끝: t={data.time:.2f} zmp_y={zy:.3f} tilt={common.tilt_deg(data.qpos):.2f} "
-          f"actual_hip_R={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
+          f"actual_hip_L={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
 
     # 2) 유지
     qpos_eq = data.qpos.copy()
@@ -110,7 +110,7 @@ def main():
 
     zx, zy = common.contact_zmp(model, data)
     print(f"hold 끝: t={data.time:.2f} zmp_y={zy:.3f} tilt={common.tilt_deg(data.qpos):.2f} "
-          f"actual_hip_R={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
+          f"actual_hip_L={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
     # 10도 기울기는 hold 끝난 지점이 이미 K0 범위(3~4도) 안이라
     # "밀기" 단계 자체를 건너뛴다 - 밀기 단계가 오히려 더 멀어지게
     # 만들었다(오늘 찾은 버그: 작은 오프셋에서 밀기가 과도하게
@@ -127,7 +127,7 @@ def main():
     data.qpos[:] = clean_qpos
     data.qvel[:] = clean_qvel
     mujoco.mj_forward(model, data)
-    print(f"  리셋 직후: tilt={common.tilt_deg(data.qpos):.2f} actual_hip_R={math.degrees(data.qpos[qadr_R]):.2f}deg "
+    print(f"  리셋 직후: tilt={common.tilt_deg(data.qpos):.2f} actual_hip_L={math.degrees(data.qpos[qadr_R]):.2f}deg "
           f"act_norm={np.linalg.norm(data.act):.4f} ncon={data.ncon}")
 
     n_final = int(120.0 / 0.01)
@@ -136,7 +136,7 @@ def main():
         if tick % 500 == 0:
             zx, zy = common.contact_zmp(model, data)
             print(f"  K0 t={data.time:.2f} zmp_y={zy:.3f} tilt={common.tilt_deg(data.qpos):.2f} "
-                  f"actual_hip_R={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
+                  f"actual_hip_L={math.degrees(data.qpos[qadr_R]):.2f}deg |v|={np.linalg.norm(data.qvel[:3]):.4f}")
         if fell:
             print("FELL(K0) at", fell)
             return

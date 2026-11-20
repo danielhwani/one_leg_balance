@@ -11,11 +11,11 @@ open_loop_swing.py에서 스윙 자체는 부드러워졌지만(전신 피드백
 
 구조 (3단계):
 1) stand: 순수 K0.
-2) swing: 전신 피드백 끔(이륙 시점 trim 유지) + 스윙 다리(hip_L/knee_L)만
+2) swing: 전신 피드백 끔(이륙 시점 trim 유지) + 스윙 다리(hip_R/knee_R)만
    스크립트. 착지 목표 무릎각을 0도가 아니라 **20도(이미 굽은 채)**로
    바꿔 애초에 뻣뻣하게 닿지 않게 한다.
 3) 접촉력이 일정 틱 이상 유지되면(dwell, 순간 바운스 오탐 방지) absorb로
-   전환: 착지 다리(knee_L, ankle_pitch_L)는 명시적 흡수 프로파일
+   전환: 착지 다리(knee_R, ankle_pitch_R)는 명시적 흡수 프로파일
    (더 깊이 굽혔다가 다시 펴서 안정 자세로) 스크립트, **나머지 전신은
    K0(원래 평형점 기준) 피드백 재개** - 몸통/팔이 그 피드백으로 자연히
    보조 역할을 하게 둔다.
@@ -59,7 +59,7 @@ def foot_fz(model, data, body_id):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+        a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         lift_knee_deg, land_knee_deg, hip_target_deg,
         swing_duration_s,
         touch_fz=5.0, touch_dwell_s=0.02,
@@ -89,7 +89,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
     knee_at_touch = 0.0
 
     for tick in range(int(duration_s / 0.01)):
-        fz = foot_fz(model, data, foot_L_body)
+        fz = foot_fz(model, data, foot_R_body)
         vmag = np.linalg.norm(data.qvel[:3])
 
         if phase == "stand" and data.time >= stand_s:
@@ -108,7 +108,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                     phase = "absorb"
                     touch_confirmed_t = touch_t0
                     absorb_t0 = data.time
-                    knee_at_touch = data.ctrl[a_knee_L]
+                    knee_at_touch = data.ctrl[a_knee_R]
             else:
                 touch_t0 = None  # 재부상 - dwell 리셋
 
@@ -152,10 +152,10 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
 
             if phase == "swing":
                 s = min(1.0, (data.time - swing_t0) / swing_duration_s)
-                u[a_hip_L] = math.radians(hip_target_deg) * s
-                u[a_knee_L] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
+                u[a_hip_R] = math.radians(hip_target_deg) * s
+                u[a_knee_R] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
                     + math.radians(land_knee_deg) * max(0.0, 2 * s - 1)
-                u[a_ankle_pitch_L] = 0.0
+                u[a_ankle_pitch_R] = 0.0
             elif phase == "absorb":
                 # 착지 다리만 명시적 흡수 프로파일로 덮어씀(무릎: 더 굽혔다가 펴기)
                 dt = data.time - absorb_t0
@@ -166,8 +166,8 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                 else:
                     su = min(1.0, (dt - absorb_down_s) / absorb_up_s)
                     target = absorb_deep_deg + (land_knee_deg - absorb_deep_deg) * su
-                u[a_knee_L] = math.radians(target)
-                u[a_ankle_pitch_L] = 0.0
+                u[a_knee_R] = math.radians(target)
+                u[a_ankle_pitch_R] = 0.0
 
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
@@ -193,17 +193,17 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
-    foot_L_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
+    foot_R_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
 
     print("=== 착지 흡수(무릎 굽혀 쿠션) 추가 - swing_duration x land_knee 스윕 ===")
     for swing_dur in [0.5, 0.8, 1.2]:
         for land_knee in [15.0, 20.0, 25.0]:
             touch, landed, fell = run(
                 model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-                a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+                a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
                 lift_knee_deg=25.0, land_knee_deg=land_knee, hip_target_deg=15.0,
                 swing_duration_s=swing_dur, duration_s=15.0)
             print(f"swing_dur={swing_dur:4.1f} land_knee={land_knee:5.1f}: "
@@ -212,7 +212,7 @@ def main():
     print()
     print("=== 상세 추적: swing_dur=0.8, land_knee=20 ===")
     run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+        a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         lift_knee_deg=25.0, land_knee_deg=20.0, hip_target_deg=15.0,
         swing_duration_s=0.8, duration_s=10.0, verbose=True)
 

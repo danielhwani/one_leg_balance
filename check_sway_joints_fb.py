@@ -13,8 +13,8 @@ Q, R = common.build_cost_two_leg(model)
 K0 = common.solve_dare(A0, B0, Q, R)
 ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
 a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
 
 AMPLITUDE_DEG, PERIOD_S = 4.0, 1.0
 
@@ -33,8 +33,8 @@ for tick in range(int(10.0 / 0.01)):
         dv = data.qvel - qvel_eq0
         x = np.concatenate([dq, dv])
         u = -K0 @ x
-        u[a_hip_L] = bias
         u[a_hip_R] = bias
+        u[a_hip_L] = bias
         u = np.clip(u, -ctrl_limits, ctrl_limits)
         data.ctrl[:] = u
         mujoco.mj_step(model, data)

@@ -54,7 +54,7 @@ def foot_fz(model, data, body_id):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+        a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         lift_knee_deg, land_knee_deg, hip_target_deg,
         swing_duration_s, post_relin_interval=0.1,
         duration_s=15.0, verbose=False):
@@ -75,7 +75,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
     tick_since_relin = 0
 
     for tick in range(int(duration_s / 0.01)):
-        fz = foot_fz(model, data, foot_L_body)
+        fz = foot_fz(model, data, foot_R_body)
 
         if phase == "stand" and data.time >= stand_s:
             phase = "swing"
@@ -115,10 +115,10 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
 
             if phase == "swing":
                 s = min(1.0, (data.time - swing_t0) / swing_duration_s)
-                u[a_hip_L] = math.radians(hip_target_deg) * s
-                u[a_knee_L] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
+                u[a_hip_R] = math.radians(hip_target_deg) * s
+                u[a_knee_R] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
                     + math.radians(land_knee_deg) * max(0.0, 2 * s - 1)
-                u[a_ankle_pitch_L] = 0.0
+                u[a_ankle_pitch_R] = 0.0
 
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
@@ -144,17 +144,17 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
-    foot_L_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
+    foot_R_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
 
     print("=== 스윙 중 전신 피드백 OFF (이동으로만 취급) - swing_duration 스윕 ===")
     for swing_dur in [0.3, 0.5, 0.8, 1.2, 2.0]:
         for knee_deg in [15.0, 25.0]:
             liftoff, landed, fell = run(
                 model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-                a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+                a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
                 lift_knee_deg=knee_deg, land_knee_deg=0.0, hip_target_deg=15.0,
                 swing_duration_s=swing_dur, duration_s=15.0)
             print(f"swing_dur={swing_dur:4.1f} knee={knee_deg:5.1f}: "
@@ -163,7 +163,7 @@ def main():
     print()
     print("=== 상세 추적: swing_dur=0.5, knee=25 ===")
     run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L, foot_L_body,
+        a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         lift_knee_deg=25.0, land_knee_deg=0.0, hip_target_deg=15.0,
         swing_duration_s=0.5, duration_s=10.0, verbose=True)
 

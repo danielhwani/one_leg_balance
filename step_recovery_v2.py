@@ -34,7 +34,7 @@ def relinearize_at(model, qpos, ctrl, Q, R):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L,
+        a_hip_R, a_knee_R, a_ankle_pitch_R,
         push_mps, push_time_s, step_duration_s, lift_knee_deg, land_knee_deg, hip_target_deg,
         duration_s=15.0, relin_interval=1.0, verbose=False):
     nv = model.nv
@@ -88,9 +88,9 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                     else:
                         knee = math.radians(lift_knee_deg) + (math.radians(land_knee_deg) - math.radians(lift_knee_deg)) * ((s - 0.5) / 0.5)
                     hip = math.radians(hip_target_deg) * min(1.0, s / 0.7)
-                    u[a_hip_L] = hip
-                    u[a_knee_L] = knee
-                    u[a_ankle_pitch_L] = 0.0
+                    u[a_hip_R] = hip
+                    u[a_knee_R] = knee
+                    u[a_ankle_pitch_R] = 0.0
 
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -114,12 +114,12 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
 
     print("=== 가장 약한 조합 상세 추적 (step_dur=1.5, lift_knee=10, hip_target=-5) ===")
-    fell = run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits, a_hip_L, a_knee_L, a_ankle_pitch_L,
+    fell = run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits, a_hip_R, a_knee_R, a_ankle_pitch_R,
                0.0, 5.0, 1.5, 10.0, 5.0, -5.0, duration_s=15.0, relin_interval=0.5, verbose=True)
     print(f"fell={fell}")
 

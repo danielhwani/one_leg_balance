@@ -91,43 +91,28 @@
              (0.08)=0.4로 맞춰서 몸통 표면에 딱 붙게 줄였다. 팔이
              흔들리면 무게중심이 앞뒤로 움직여서 LQR이 그걸 또 다른
              균형 메커니즘으로 쓸 수 있는지 보려고 추가. -->
-        <body name="arm_L" pos="0 -0.4 0.7">
+        <body name="arm_R" pos="0 -0.4 0.7">
           <!-- 어깨 ab/duction(2026-11-18 추가, 사용자 요청 - 옆으로도
                벌릴 수 있게) - 엉덩이/발목/허리와 같은 순서(벌림 축이
                바깥/먼저, 피치가 안쪽/나중). -->
-          <joint name="shoulder_abduct_L" type="hinge" axis="1 0 0" range="-1.0472 1.0472"/>
-          <joint name="arm_L" type="hinge" axis="0 1 0" range="-0.7854 0.7854"/>
+          <joint name="shoulder_abduct_R" type="hinge" axis="1 0 0" range="-1.0472 1.0472"/>
+          <joint name="arm_R" type="hinge" axis="0 1 0" range="-0.7854 0.7854"/>
           <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.08" mass="0.8" rgba="0.45 0.45 0.55 1"/>
           <!-- 팔꿈치(2026-11-18 추가, 사용자 요청) - 무릎과 같은 패턴
                (한쪽으로만 0~90도 굽혀짐). 위팔(ARM_LEN의 절반)+아래팔
                (나머지 절반)로 나눠서 총 길이는 그대로. -->
-          <body name="forearm_L" pos="0 0 -0.5">
-            <joint name="elbow_L" type="hinge" axis="0 1 0" range="-1.5708 0"/>
+          <body name="forearm_R" pos="0 0 -0.5">
+            <joint name="elbow_R" type="hinge" axis="0 1 0" range="-1.5708 0"/>
             <!-- 전완 회전(회내/회외, 2026-11-18 추가, 사용자 요청 -
                  "사람과 유사하게") - 팔꿈치 굽힘 다음(안쪽)에 적용돼서
                  아래팔 자신의 긴 축(로컬 Z) 기준으로 비튼다. -->
-            <joint name="elbow_twist_L" type="hinge" axis="0 0 1" range="-1.5708 1.5708"/>
+            <joint name="elbow_twist_R" type="hinge" axis="0 0 1" range="-1.5708 1.5708"/>
             <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.07" mass="0.7" rgba="0.40 0.40 0.50 1"/>
             <!-- 손목(2026-11-18 추가, 사용자 요청) - 엉덩이/발목/허리/목과
                  같은 패턴(편위=롤, 바깥 먼저 / 굽힘=피치, 안쪽 나중).
                  전완 회전은 이미 elbow_twist로 처리했으니 손목엔 비틀기
                  축 없음(사람도 손목 자체엔 회전축이 없고 전완에서
                  비틀림). -->
-            <body name="hand_L" pos="0 0 -0.5">
-              <joint name="wrist_deviate_L" type="hinge" axis="1 0 0" range="-0.3491 0.3491"/>
-              <joint name="wrist_flex_L" type="hinge" axis="0 1 0" range="-1.0472 1.0472"/>
-              <geom type="capsule" fromto="0 0 0 0 0 -0.15" size="0.05" mass="0.15" rgba="0.85 0.75 0.65 1"/>
-            </body>
-          </body>
-        </body>
-        <body name="arm_R" pos="0 0.4 0.7">
-          <joint name="shoulder_abduct_R" type="hinge" axis="1 0 0" range="-1.0472 1.0472"/>
-          <joint name="arm_R" type="hinge" axis="0 1 0" range="-0.7854 0.7854"/>
-          <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.08" mass="0.8" rgba="0.45 0.45 0.55 1"/>
-          <body name="forearm_R" pos="0 0 -0.5">
-            <joint name="elbow_R" type="hinge" axis="0 1 0" range="-1.5708 0"/>
-            <joint name="elbow_twist_R" type="hinge" axis="0 0 1" range="-1.5708 1.5708"/>
-            <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.07" mass="0.7" rgba="0.40 0.40 0.50 1"/>
             <body name="hand_R" pos="0 0 -0.5">
               <joint name="wrist_deviate_R" type="hinge" axis="1 0 0" range="-0.3491 0.3491"/>
               <joint name="wrist_flex_R" type="hinge" axis="0 1 0" range="-1.0472 1.0472"/>
@@ -135,25 +120,26 @@
             </body>
           </body>
         </body>
-      </body>
-
-      <!-- 다리: 엉덩이 ab/duction(롤, 바깥) + 기존 hip_L(피치, 안쪽)
-           + 무릎 + 발목(롤 바깥 + 피치 안쪽) + 평평한 발. -->
-      <body name="leg_L" pos="0 -0.25 -0.7">
-        <joint name="hip_abduct_L" type="hinge" axis="1 0 0" range="-0.4363 0.4363"/>
-        <joint name="hip_L" type="hinge" axis="0 1 0" range="-0.6109 0.6109"/>
-        <geom type="capsule" fromto="0 0 0 0 0 -0.6" size="0.09" mass="0.6" rgba="0.35 0.35 0.45 1"/>
-        <body name="shin_L" pos="0 0 -0.6">
-          <joint name="knee_L" type="hinge" axis="0 1 0" range="0 1.5708"/>
-          <geom type="capsule" fromto="0 0 0 0 0 -0.53" size="0.07" mass="0.5" rgba="0.30 0.30 0.40 1"/>
-          <body name="foot_L" pos="0 0 -0.6">
-            <joint name="ankle_roll_L" type="hinge" axis="1 0 0" range="-0.3491 0.3491"/>
-            <joint name="ankle_pitch_L" type="hinge" axis="0 1 0" range="-0.4363 0.4363"/>
-            <geom type="box" pos="0.06 0 0.025" size="0.17 0.10 0.025" mass="0.3" rgba="0.2 0.2 0.25 1"/>
+        <body name="arm_L" pos="0 0.4 0.7">
+          <joint name="shoulder_abduct_L" type="hinge" axis="1 0 0" range="-1.0472 1.0472"/>
+          <joint name="arm_L" type="hinge" axis="0 1 0" range="-0.7854 0.7854"/>
+          <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.08" mass="0.8" rgba="0.45 0.45 0.55 1"/>
+          <body name="forearm_L" pos="0 0 -0.5">
+            <joint name="elbow_L" type="hinge" axis="0 1 0" range="-1.5708 0"/>
+            <joint name="elbow_twist_L" type="hinge" axis="0 0 1" range="-1.5708 1.5708"/>
+            <geom type="capsule" fromto="0 0 0 0 0 -0.5" size="0.07" mass="0.7" rgba="0.40 0.40 0.50 1"/>
+            <body name="hand_L" pos="0 0 -0.5">
+              <joint name="wrist_deviate_L" type="hinge" axis="1 0 0" range="-0.3491 0.3491"/>
+              <joint name="wrist_flex_L" type="hinge" axis="0 1 0" range="-1.0472 1.0472"/>
+              <geom type="capsule" fromto="0 0 0 0 0 -0.15" size="0.05" mass="0.15" rgba="0.85 0.75 0.65 1"/>
+            </body>
           </body>
         </body>
       </body>
-      <body name="leg_R" pos="0 0.25 -0.7">
+
+      <!-- 다리: 엉덩이 ab/duction(롤, 바깥) + 기존 hip_R(피치, 안쪽)
+           + 무릎 + 발목(롤 바깥 + 피치 안쪽) + 평평한 발. -->
+      <body name="leg_R" pos="0 -0.25 -0.7">
         <joint name="hip_abduct_R" type="hinge" axis="1 0 0" range="-0.4363 0.4363"/>
         <joint name="hip_R" type="hinge" axis="0 1 0" range="-0.6109 0.6109"/>
         <geom type="capsule" fromto="0 0 0 0 0 -0.6" size="0.09" mass="0.6" rgba="0.35 0.35 0.45 1"/>
@@ -167,35 +153,49 @@
           </body>
         </body>
       </body>
+      <body name="leg_L" pos="0 0.25 -0.7">
+        <joint name="hip_abduct_L" type="hinge" axis="1 0 0" range="-0.4363 0.4363"/>
+        <joint name="hip_L" type="hinge" axis="0 1 0" range="-0.6109 0.6109"/>
+        <geom type="capsule" fromto="0 0 0 0 0 -0.6" size="0.09" mass="0.6" rgba="0.35 0.35 0.45 1"/>
+        <body name="shin_L" pos="0 0 -0.6">
+          <joint name="knee_L" type="hinge" axis="0 1 0" range="0 1.5708"/>
+          <geom type="capsule" fromto="0 0 0 0 0 -0.53" size="0.07" mass="0.5" rgba="0.30 0.30 0.40 1"/>
+          <body name="foot_L" pos="0 0 -0.6">
+            <joint name="ankle_roll_L" type="hinge" axis="1 0 0" range="-0.3491 0.3491"/>
+            <joint name="ankle_pitch_L" type="hinge" axis="0 1 0" range="-0.4363 0.4363"/>
+            <geom type="box" pos="0.06 0 0.025" size="0.17 0.10 0.025" mass="0.3" rgba="0.2 0.2 0.25 1"/>
+          </body>
+        </body>
+      </body>
     </body>
   </worldbody>
 
   <actuator>
-    <position name="act_hip_abduct_L" joint="hip_abduct_L" kp="150" kv="6"/>
     <position name="act_hip_abduct_R" joint="hip_abduct_R" kp="150" kv="6"/>
-    <position name="act_hip_L" joint="hip_L" kp="150" kv="6"/>
+    <position name="act_hip_abduct_L" joint="hip_abduct_L" kp="150" kv="6"/>
     <position name="act_hip_R" joint="hip_R" kp="150" kv="6"/>
-    <position name="act_knee_L" joint="knee_L" kp="150" kv="6"/>
+    <position name="act_hip_L" joint="hip_L" kp="150" kv="6"/>
     <position name="act_knee_R" joint="knee_R" kp="150" kv="6"/>
-    <position name="act_ankle_roll_L" joint="ankle_roll_L" kp="100" kv="4"/>
+    <position name="act_knee_L" joint="knee_L" kp="150" kv="6"/>
     <position name="act_ankle_roll_R" joint="ankle_roll_R" kp="100" kv="4"/>
-    <position name="act_ankle_pitch_L" joint="ankle_pitch_L" kp="100" kv="4"/>
+    <position name="act_ankle_roll_L" joint="ankle_roll_L" kp="100" kv="4"/>
     <position name="act_ankle_pitch_R" joint="ankle_pitch_R" kp="100" kv="4"/>
+    <position name="act_ankle_pitch_L" joint="ankle_pitch_L" kp="100" kv="4"/>
     <position name="act_waist_roll" joint="waist_roll" kp="300" kv="15"/>
     <position name="act_waist_pitch" joint="waist_pitch" kp="300" kv="15"/>
     <position name="act_neck_roll" joint="neck_roll" kp="300" kv="15"/>
     <position name="act_neck_pitch" joint="neck_pitch" kp="300" kv="15"/>
-    <position name="act_shoulder_abduct_L" joint="shoulder_abduct_L" kp="80" kv="4"/>
     <position name="act_shoulder_abduct_R" joint="shoulder_abduct_R" kp="80" kv="4"/>
-    <position name="act_arm_L" joint="arm_L" kp="80" kv="4"/>
+    <position name="act_shoulder_abduct_L" joint="shoulder_abduct_L" kp="80" kv="4"/>
     <position name="act_arm_R" joint="arm_R" kp="80" kv="4"/>
-    <position name="act_elbow_L" joint="elbow_L" kp="80" kv="4"/>
+    <position name="act_arm_L" joint="arm_L" kp="80" kv="4"/>
     <position name="act_elbow_R" joint="elbow_R" kp="80" kv="4"/>
-    <position name="act_elbow_twist_L" joint="elbow_twist_L" kp="40" kv="2"/>
+    <position name="act_elbow_L" joint="elbow_L" kp="80" kv="4"/>
     <position name="act_elbow_twist_R" joint="elbow_twist_R" kp="40" kv="2"/>
-    <position name="act_wrist_deviate_L" joint="wrist_deviate_L" kp="40" kv="2"/>
+    <position name="act_elbow_twist_L" joint="elbow_twist_L" kp="40" kv="2"/>
     <position name="act_wrist_deviate_R" joint="wrist_deviate_R" kp="40" kv="2"/>
-    <position name="act_wrist_flex_L" joint="wrist_flex_L" kp="40" kv="2"/>
+    <position name="act_wrist_deviate_L" joint="wrist_deviate_L" kp="40" kv="2"/>
     <position name="act_wrist_flex_R" joint="wrist_flex_R" kp="40" kv="2"/>
+    <position name="act_wrist_flex_L" joint="wrist_flex_L" kp="40" kv="2"/>
   </actuator>
 </mujoco>

@@ -1,7 +1,7 @@
 """sway_forward_back.py
 ------------------------
 좌우 흔들기(sway_continuous.py)와 같은 방식, 축만 hip_abduct(좌우)
-대신 hip_L/hip_R(피치, 양쪽 다리를 같은 방향으로 - 앞뒤로 숙이는
+대신 hip_R/hip_L(피치, 양쪽 다리를 같은 방향으로 - 앞뒤로 숙이는
 자연스러운 동작)을 쓴다. check_pitch_basin.py로 범위(+6도/-5도)를
 먼저 확인했으므로 진폭은 4도로 안전하게.
 """
@@ -13,7 +13,7 @@ import mujoco
 import common
 
 
-def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_L, a_hip_R,
+def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_R, a_hip_L,
         amplitude_deg, period_s, duration_s, verbose=False):
     nv = model.nv
     data = mujoco.MjData(model)
@@ -30,8 +30,8 @@ def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_L, a_hip_R,
             dv = data.qvel - qvel_eq0
             x = np.concatenate([dq, dv])
             u = -K0 @ x
-            u[a_hip_L] = bias_rad
             u[a_hip_R] = bias_rad
+            u[a_hip_L] = bias_rad
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -53,11 +53,11 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
     a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
 
     print("=== amp=4deg period=1.0s(걸음걸이 수준), 150초 장시간 검증 ===")
-    fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_L, a_hip_R,
+    fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_R, a_hip_L,
                4.0, 1.0, 150.0, verbose=True)
     print(f"fell={fell}")
 

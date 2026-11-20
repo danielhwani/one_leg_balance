@@ -13,7 +13,7 @@
    버그로 빠진 채 실행됐다. 무릎을 30도까지 구부렸을 때 왼발이
    실제로 땅에서 떨어졌는지조차 확인 안 됐다.
 
-이 스크립트는 접촉력을 직접 측정해서(mj_contactForce, foot_L
+이 스크립트는 접촉력을 직접 측정해서(mj_contactForce, foot_R
 바디 소속 geom만 필터) "왼발이 실제로 뜬 시점"을 정확히 찍고,
 그 전후로 tilt/velocity가 어떻게 바뀌는지를 본다. 스윙/체중이동은
 전혀 하지 않고 무릎만 다양한 속도로 살짝 구부려 "수직으로만"
@@ -28,14 +28,14 @@ import mujoco
 import common
 
 
-def left_foot_fz(model, data, foot_L_body):
+def left_foot_fz(model, data, foot_R_body):
     total = 0.0
     force = np.zeros(6)
     for i in range(data.ncon):
         c = data.contact[i]
         b1 = model.geom_bodyid[c.geom1]
         b2 = model.geom_bodyid[c.geom2]
-        if b1 != foot_L_body and b2 != foot_L_body:
+        if b1 != foot_R_body and b2 != foot_R_body:
             continue
         mujoco.mj_contactForce(model, data, i, force)
         frame = c.frame.reshape(3, 3)
@@ -44,7 +44,7 @@ def left_foot_fz(model, data, foot_L_body):
     return total
 
 
-def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_L, foot_L_body,
+def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_R, foot_R_body,
         knee_deg, lift_duration_s, duration_s=15.0, verbose=False):
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq0
@@ -53,7 +53,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_L, foot_L_body,
 
     liftoff_t = None
     fell = None
-    fz0 = left_foot_fz(model, data, foot_L_body)
+    fz0 = left_foot_fz(model, data, foot_R_body)
 
     for tick in range(int(duration_s / 0.01)):
         s = min(1.0, data.time / lift_duration_s)
@@ -63,12 +63,12 @@ def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_L, foot_L_body,
             dv = data.qvel - qvel_eq0
             x = np.concatenate([dq, dv])
             u = -K0 @ x
-            u[a_knee_L] = math.radians(knee_deg) * s
+            u[a_knee_R] = math.radians(knee_deg) * s
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
 
-        fz = left_foot_fz(model, data, foot_L_body)
+        fz = left_foot_fz(model, data, foot_R_body)
         if liftoff_t is None and fz < 0.5:
             liftoff_t = data.time
         t = common.tilt_deg(data.qpos)
@@ -90,15 +90,15 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    foot_L_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    foot_R_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
 
     print("=== 순수 수직 들어올리기(방향 이동 없음) - 접촉력으로 실제 이륙 시점 확인 ===")
     print("    (무릎 각도, 드는 시간) -> 실제 이륙 시각 / 쓰러진 시각")
     for knee_deg in [5.0, 10.0, 15.0, 20.0, 30.0]:
         for lift_dur in [0.3, 1.0, 5.0, 20.0]:
             liftoff_t, fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits,
-                                   a_knee_L, foot_L_body,
+                                   a_knee_R, foot_R_body,
                                    knee_deg=knee_deg, lift_duration_s=lift_dur,
                                    duration_s=max(15.0, lift_dur + 10.0))
             survive_after = (fell - liftoff_t) if (liftoff_t and fell) else None
@@ -107,7 +107,7 @@ def main():
 
     print()
     print("=== 상세 추적: knee=20도, lift_dur=1.0초 ===")
-    run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_L, foot_L_body,
+    run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_knee_R, foot_R_body,
         knee_deg=20.0, lift_duration_s=1.0, duration_s=10.0, verbose=True)
 
 

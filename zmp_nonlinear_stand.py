@@ -7,7 +7,7 @@ LQR을 완전히 안 쓰고, 순수 ZMP 피드백만으로 두 발 서있기부�
 - 나머지 22개 액추에이터는 qpos_eq0의 자기 자신 목표값을 그대로
   유지(= 가만히 서있는 자세 그대로, 추가 피드백 없음).
 - 평형점(qpos_eq0)에서 시작하는 것부터 확인하고, 그 다음 초기
-  자세를 살짝씩 바꿔가며(hip_abduct_R 오프셋, 전체 기울기 등) 어디까지
+  자세를 살짝씩 바꿔가며(hip_abduct_L 오프셋, 전체 기울기 등) 어디까지
   버티는지 폭을 스윕한다.
 """
 import math
@@ -44,7 +44,7 @@ def run(model, qpos_eq0, qvel_eq0, natural_targets, ankle_ids, hip_ids=None,
 
     a_roll_L, a_roll_R, a_pitch_L, a_pitch_R = ankle_ids
     if hip_ids is not None:
-        a_hip_abduct_L, a_hip_abduct_R, a_hip_pitch_L, a_hip_pitch_R = hip_ids
+        a_hip_abduct_R, a_hip_abduct_L, a_hip_pitch_L, a_hip_pitch_R = hip_ids
     zmp_x_prev, zmp_y_prev = common.contact_zmp(model, data)
     fell = None
 
@@ -73,8 +73,8 @@ def run(model, qpos_eq0, qvel_eq0, natural_targets, ankle_ids, hip_ids=None,
                 hip_abduct_fb = -kp_hip_y * err_y - kd_hip_y * zmp_y_rate
                 u[a_hip_pitch_L] += hip_pitch_fb
                 u[a_hip_pitch_R] += hip_pitch_fb
-                u[a_hip_abduct_L] += hip_abduct_fb
                 u[a_hip_abduct_R] += hip_abduct_fb
+                u[a_hip_abduct_L] += hip_abduct_fb
 
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -98,13 +98,13 @@ def main():
     def act(name):
         return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
 
-    ankle_ids = (act("act_ankle_roll_L"), act("act_ankle_roll_R"),
-                 act("act_ankle_pitch_L"), act("act_ankle_pitch_R"))
+    ankle_ids = (act("act_ankle_roll_R"), act("act_ankle_roll_L"),
+                 act("act_ankle_pitch_R"), act("act_ankle_pitch_L"))
     # hip_abduct(좌우)는 양쪽에 같은 값을 주면 "쐐기" 효과로 이상하게
     # 반응한다는 걸 이미 알고 있어서(오늘 isolate_weight_shift_only.py)
     # 일단 hip_pitch(앞뒤, 양쪽 같은 방향이 자연스러운 동작)만 추가.
-    hip_ids = (act("act_hip_abduct_L"), act("act_hip_abduct_R"),
-               act("act_hip_L"), act("act_hip_R"))
+    hip_ids = (act("act_hip_abduct_R"), act("act_hip_abduct_L"),
+               act("act_hip_R"), act("act_hip_L"))
 
     print("=== 발목 + 엉덩이 피치(앞뒤)까지 같이, 게인 스윕 ===")
     for kp in [0.1, 0.3, 0.5, 1.0]:

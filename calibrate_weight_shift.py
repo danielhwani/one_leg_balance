@@ -6,7 +6,7 @@
 전이 현상 때문에 반대 방향으로 튀니, 먼저 "각도 -> 정적 ZMP" 관계를
 깨끗하게 확보해두고 그 위에 경로를 설계한다.
 
-양쪽 다리 다 테스트 - hip_abduct_L과 hip_abduct_R이 실제로 대칭인지도
+양쪽 다리 다 테스트 - hip_abduct_R과 hip_abduct_L이 실제로 대칭인지도
 확인(모델 정의만 보면 대칭이어야 하지만 직접 검증하는 게 안전).
 """
 import math
@@ -39,13 +39,13 @@ def main():
 
     angles = [0, -3, -5, -8, -10, -12, -15, -18, -20]
 
-    print("=== hip_abduct_R (오른다리 스탠스) 캘리브레이션 ===")
-    for deg, zx, zy, t, v in calibrate(model, qpos_eq, qvel_eq, "act_hip_abduct_R", angles):
+    print("=== hip_abduct_L (오른다리 스탠스) 캘리브레이션 ===")
+    for deg, zx, zy, t, v in calibrate(model, qpos_eq, qvel_eq, "act_hip_abduct_L", angles):
         print(f"  angle={deg:+.0f}deg -> zmp=({zx:.3f},{zy:.3f}) tilt={t:.2f} |v|={np.linalg.norm(v):.4f}")
 
     print()
-    print("=== hip_abduct_L (왼다리 스탠스) 캘리브레이션 ===")
-    for deg, zx, zy, t, v in calibrate(model, qpos_eq, qvel_eq, "act_hip_abduct_L", angles):
+    print("=== hip_abduct_R (왼다리 스탠스) 캘리브레이션 ===")
+    for deg, zx, zy, t, v in calibrate(model, qpos_eq, qvel_eq, "act_hip_abduct_R", angles):
         print(f"  angle={deg:+.0f}deg -> zmp=({zx:.3f},{zy:.3f}) tilt={t:.2f} |v|={np.linalg.norm(v):.4f}")
 
 

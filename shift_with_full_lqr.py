@@ -15,7 +15,7 @@ def main():
     K = common.solve_dare(A, B, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")
+    jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")
     qadr = model.jnt_qposadr[jid]
 
     TARGET_DEG = -20.0
@@ -43,7 +43,7 @@ def main():
             zx, zy = common.contact_zmp(model, data)
             t = common.tilt_deg(data.qpos)
             print(f"t={data.time:.2f} s={s:.2f} target={math.degrees(qpos_eq[qadr]):.1f}deg "
-                  f"actual_hip_abduct_R={math.degrees(data.qpos[qadr]):.1f}deg zmp_y={zy:.3f} tilt={t:.2f}")
+                  f"actual_hip_abduct_L={math.degrees(data.qpos[qadr]):.1f}deg zmp_y={zy:.3f} tilt={t:.2f}")
         t = common.tilt_deg(data.qpos)
         if t > 55 and fell is None:
             fell = data.time

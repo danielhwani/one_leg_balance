@@ -12,10 +12,10 @@ def act(model, name):
 
 def run(model, qpos_eq, qvel_eq, kp, kd, duration=20.0):
     nu = model.nu
-    a_ankle_roll_R = act(model, "act_ankle_roll_R")
     a_ankle_roll_L = act(model, "act_ankle_roll_L")
-    a_ankle_pitch_R = act(model, "act_ankle_pitch_R")
+    a_ankle_roll_R = act(model, "act_ankle_roll_R")
     a_ankle_pitch_L = act(model, "act_ankle_pitch_L")
+    a_ankle_pitch_R = act(model, "act_ankle_pitch_R")
 
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq
@@ -31,10 +31,10 @@ def run(model, qpos_eq, qvel_eq, kp, kd, duration=20.0):
             ankle_pitch_fb = -kp * pitch_err - kd * pitch_rate
 
             u = np.zeros(nu)
-            u[a_ankle_roll_R] = np.clip(ankle_roll_fb, -0.35, 0.35)
             u[a_ankle_roll_L] = np.clip(ankle_roll_fb, -0.35, 0.35)
-            u[a_ankle_pitch_R] = np.clip(ankle_pitch_fb, -0.43, 0.43)
+            u[a_ankle_roll_R] = np.clip(ankle_roll_fb, -0.35, 0.35)
             u[a_ankle_pitch_L] = np.clip(ankle_pitch_fb, -0.43, 0.43)
+            u[a_ankle_pitch_R] = np.clip(ankle_pitch_fb, -0.43, 0.43)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
         t = common.tilt_deg(data.qpos)

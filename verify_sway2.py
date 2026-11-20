@@ -38,10 +38,10 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
-    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
     LEAN_DEG = 20.0
     RAMP_T = 5.0
@@ -82,15 +82,15 @@ def main():
                 ctrl_trim = data.ctrl.copy()
                 K = relinearize_at(model, qpos_eq, ctrl_trim, Q, R)
             bias = bias_fn(tick, n)
-            hip_R_cmd = min(bias, 0.0)
-            hip_L_cmd = max(bias, 0.0)
+            hip_L_cmd = min(bias, 0.0)
+            hip_R_cmd = max(bias, 0.0)
             # 어제 검증된 원본 레시피 (prev_bias만 "실제 달성값"으로
             # 고친 버전) - 기준점(qpos_eq)은 램프 중 그대로 두고,
             # ctrl 쪽만 해당 관절 절대값으로 덮어쓴다(K@x는 그대로
             # 섞임 - 완전 배제/기준점 추적 둘 다 오히려 더 나빴다).
             ctrl_trim_eff = ctrl_trim.copy()
-            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
-            ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+            ctrl_trim_eff[a_abduct_R] = hip_L_cmd
+            ctrl_trim_eff[a_abduct_L] = hip_R_cmd
             kx_R_dbg = 0.0
             for _ in range(2):
                 dq = np.zeros(nv)
@@ -107,8 +107,8 @@ def main():
                 zx, zy = common.contact_zmp(model, data)
                 print(f"    [{verbose_tag}] t={data.time:.2f} bias={math.degrees(bias):.1f} "
                       f"zmp_y={zy:.3f} tilt={t:.2f} |v|={np.linalg.norm(data.qvel[:3]):.4f} "
-                      f"hip_R_override={math.degrees(hip_R_cmd):.1f} Kx_R={math.degrees(kx_R_dbg):.1f} "
-                      f"actual_hip_R={math.degrees(data.qpos[qadr_R]):.1f}")
+                      f"hip_L_override={math.degrees(hip_L_cmd):.1f} Kx_R={math.degrees(kx_R_dbg):.1f} "
+                      f"actual_hip_L={math.degrees(data.qpos[qadr_R]):.1f}")
             if t > 55:
                 fell = data.time
                 print(f"  [{verbose_tag}] FELL at t={data.time:.2f}")

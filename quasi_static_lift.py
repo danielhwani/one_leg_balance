@@ -8,7 +8,7 @@
 **거의 정적으로(5~10초) 아주 천천히** 진행하면서, 계속(0.2초마다)
 재선형화해 매 순간을 새 평형점으로 다시 붙잡는다. 이게 되면 "한
 발 지지 평형점"이 실제로 존재한다는 증거가 되고, 안 되면 이
-경로(hip_abduct_R 체중이동 + hip_L/knee_L 리프트) 자체로는 CoM이
+경로(hip_abduct_L 체중이동 + hip_R/knee_R 리프트) 자체로는 CoM이
 오른발 위로 충분히 안 간다는 뜻이다.
 """
 import math
@@ -33,7 +33,7 @@ def relinearize_at(model, qpos, ctrl, Q, R):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_abduct_R, a_hip_L, a_knee_L, a_ankle_pitch_L,
+        a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R,
         weight_shift_deg, lift_knee_deg, hip_target_deg,
         lift_duration_s, relin_interval=0.2, duration_s=30.0, verbose=False):
     nv = model.nv
@@ -64,9 +64,9 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
             u = ctrl_trim - K @ x
 
             u[a_abduct_R] += math.radians(weight_shift_deg) * s
-            u[a_hip_L] = math.radians(hip_target_deg) * s
-            u[a_knee_L] = math.radians(lift_knee_deg) * s
-            u[a_ankle_pitch_L] = 0.0
+            u[a_hip_R] = math.radians(hip_target_deg) * s
+            u[a_knee_R] = math.radians(lift_knee_deg) * s
+            u[a_ankle_pitch_R] = 0.0
 
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
@@ -90,15 +90,15 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
 
     print("=== 무릎만 단독으로(체중이동 없음), lift_duration 스윕 ===")
     for lift_dur in [5.0, 10.0, 20.0, 40.0]:
         fell = run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-                   a_abduct_R, a_hip_L, a_knee_L, a_ankle_pitch_L,
+                   a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R,
                    weight_shift_deg=0.0, lift_knee_deg=30.0, hip_target_deg=0.0,
                    lift_duration_s=lift_dur, relin_interval=0.1, duration_s=lift_dur + 20.0)
         knee_at_fail = 30.0 * fell / lift_dur if fell else None

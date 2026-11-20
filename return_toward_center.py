@@ -6,7 +6,7 @@
 얻을 수 있는지 확인한다.
 
 구조: 오른쪽 기울기(ramp+presettle+hold, 기존과 동일) ->
-복귀는 "짧은 구간(N초)만 hip_abduct_R을 0으로 강하게 밀면서 매
+복귀는 "짧은 구간(N초)만 hip_abduct_L을 0으로 강하게 밀면서 매
 1초 재선형화" -> 그 다음 override를 끄고 순수 trim으로 길게(60초)
 버텨서 진짜 안정적인지 확인. N을 2, 3, 5, 7초로 바꿔가며 어디까지
 괜찮은지 스윕.
@@ -42,8 +42,8 @@ def run(push_duration, verbose=False, FINAL_HOLD_T=60.0):
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
 
     LEAN_DEG = 20.0
     RAMP_T = 5.0
@@ -56,13 +56,13 @@ def run(push_duration, verbose=False, FINAL_HOLD_T=60.0):
     data.qvel[:] = qvel_eq0
     fell = None
 
-    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd=None, hip_L_cmd=None):
+    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_L_cmd=None, hip_R_cmd=None):
         nonlocal fell
         ctrl_trim_eff = ctrl_trim_.copy()
-        if hip_R_cmd is not None:
-            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
         if hip_L_cmd is not None:
-            ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+            ctrl_trim_eff[a_abduct_R] = hip_L_cmd
+        if hip_R_cmd is not None:
+            ctrl_trim_eff[a_abduct_L] = hip_R_cmd
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq_, data.qpos)

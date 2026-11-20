@@ -27,16 +27,16 @@ def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_abduct_R, a_abduct_L,
     for tick in range(int(duration_s / 0.01)):
         bias = amplitude_deg * math.sin(2 * math.pi * data.time / period_s)
         bias_rad = math.radians(bias)
-        hip_R_cmd = min(bias_rad, 0.0)  # 음수 -> 오른쪽
-        hip_L_cmd = max(bias_rad, 0.0)  # 양수 -> 왼쪽
+        hip_L_cmd = min(bias_rad, 0.0)  # 음수 -> 오른쪽
+        hip_R_cmd = max(bias_rad, 0.0)  # 양수 -> 왼쪽
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq0, data.qpos)
             dv = data.qvel - qvel_eq0
             x = np.concatenate([dq, dv])
             u = -K0 @ x
-            u[a_abduct_R] = hip_R_cmd
-            u[a_abduct_L] = hip_L_cmd
+            u[a_abduct_R] = hip_L_cmd
+            u[a_abduct_L] = hip_R_cmd
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -58,8 +58,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
 
     print("=== amp=3deg period=1.0s(걸음걸이 수준), 150초 장시간 검증 ===")
     fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_abduct_R, a_abduct_L,

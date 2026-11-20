@@ -29,7 +29,7 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     LEAN_DEG, RAMP_T, PRE_SETTLE_T, HOLD_T, RELIN_INTERVAL = 10.0, 5.0, 5.0, 10.0, 1.0
 
@@ -39,11 +39,11 @@ def main():
     K, qpos_eq, qvel_eq, ctrl_trim = K0, qpos_eq0.copy(), qvel_eq0.copy(), np.zeros(nu)
     fell = None
 
-    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_R_cmd=None):
+    def step(K_, qpos_eq_, qvel_eq_, ctrl_trim_, hip_L_cmd=None):
         nonlocal fell
         ctrl_trim_eff = ctrl_trim_.copy()
-        if hip_R_cmd is not None:
-            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
+        if hip_L_cmd is not None:
+            ctrl_trim_eff[a_abduct_R] = hip_L_cmd
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq_, data.qpos)

@@ -8,7 +8,7 @@
 참고)를 염두에 두고, **최대한 짧게(0.2~0.3초)** 스윙해서 한 발
 지지 시간을 최소화하는 전략으로 시작한다.
 
-왼다리(hip_L/knee_L/ankle_pitch_L)만 스크립트로 움직이고, 나머지는
+왼다리(hip_R/knee_R/ankle_pitch_R)만 스크립트로 움직이고, 나머지는
 전부 원래 K0(qpos_eq0 기준) - 오른다리가 그동안 전신을 버텨야 한다.
 """
 import math
@@ -20,7 +20,7 @@ import common
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits,
-        a_hip_L, a_knee_L, a_ankle_pitch_L,
+        a_hip_R, a_knee_R, a_ankle_pitch_R,
         push_mps, push_time_s, step_duration_s, lift_knee_deg, land_knee_deg, hip_target_deg,
         duration_s=15.0, verbose=False):
     nv = model.nv
@@ -59,9 +59,9 @@ def run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits,
                     else:
                         knee = math.radians(lift_knee_deg) + (math.radians(land_knee_deg) - math.radians(lift_knee_deg)) * ((s - 0.5) / 0.5)
                     hip = math.radians(hip_target_deg) * min(1.0, s / 0.7)
-                    u[a_hip_L] = hip
-                    u[a_knee_L] = knee
-                    u[a_ankle_pitch_L] = 0.0
+                    u[a_hip_R] = hip
+                    u[a_knee_R] = knee
+                    u[a_ankle_pitch_R] = 0.0
 
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -84,12 +84,12 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
 
     print("=== 먼저 스텝 없이, push=0.5m/s가 정말 실패하는지 재확인 ===")
-    fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_L, a_knee_L, a_ankle_pitch_L,
+    fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_R, a_knee_R, a_ankle_pitch_R,
                0.5, 5.0, 0.01, 0, 0, 0, duration_s=10.0)
     print(f"스텝 없음: fell={fell}")
 
@@ -98,7 +98,7 @@ def main():
     for step_dur in [0.15, 0.2, 0.3]:
         for lift_knee in [20, 30, 40]:
             for hip_target in [-15, -25, -35]:
-                fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_L, a_knee_L, a_ankle_pitch_L,
+                fell = run(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, a_hip_R, a_knee_R, a_ankle_pitch_R,
                            0.5, 5.0, step_dur, lift_knee, 10.0, hip_target, duration_s=10.0)
                 print(f"step_dur={step_dur} lift_knee={lift_knee} hip_target={hip_target}: fell={fell}")
 

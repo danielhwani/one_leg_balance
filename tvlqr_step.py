@@ -58,16 +58,16 @@ def main():
     qpos_eq0, qvel_eq0 = common.find_equilibrium(model)
     qpos_eq1 = np.load("best_one_leg_qpos_v4.npy")
 
-    foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
     foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
 
     # 왼발 clearance 확인 (충돌을 켠 채로, qpos_eq1에서 왼발이 실제로
     # 땅 위에 떠 있는지)
     data_chk = mujoco.MjData(model)
     data_chk.qpos[:] = qpos_eq1
     mujoco.mj_forward(model, data_chk)
-    print(f"qpos_eq1에서 foot_L z={data_chk.xpos[foot_L_id][2]:.4f}, "
-          f"foot_R z={data_chk.xpos[foot_R_id][2]:.4f}")
+    print(f"qpos_eq1에서 foot_R z={data_chk.xpos[foot_R_id][2]:.4f}, "
+          f"foot_L z={data_chk.xpos[foot_L_id][2]:.4f}")
 
     def ctrl_of(qpos):
         c = np.zeros(nu)

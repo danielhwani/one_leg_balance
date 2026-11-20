@@ -38,11 +38,11 @@ fz_L=0.00 fz_R=87.18 (전체 몸무게=246.33)
 
 === 충돌을 다시 켠 채로 실제 클리어런스 검증 ===
 충돌 켠 상태 fz_L=0.00 (0이어야 진짜 한 발 지지)
-foot_L body z=0.8548, foot_L geom z=0.8297
-  contact: world - shin_R dist=-0.0008
-  contact: world - foot_R dist=-0.0009
-  contact: world - foot_R dist=-0.0006
-  contact: world - foot_R dist=-0.0009
-  contact: world - foot_R dist=-0.0006
-  contact: forearm_R - torso dist=-0.1083
-  contact: hand_R - torso dist=-0.1367
+foot_R body z=0.8548, foot_R geom z=0.8297
+  contact: world - shin_L dist=-0.0008
+  contact: world - foot_L dist=-0.0009
+  contact: world - foot_L dist=-0.0006
+  contact: world - foot_L dist=-0.0009
+  contact: world - foot_L dist=-0.0006
+  contact: forearm_L - torso dist=-0.1083
+  contact: hand_L - torso dist=-0.1367

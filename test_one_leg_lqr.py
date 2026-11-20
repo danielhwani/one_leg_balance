@@ -24,10 +24,10 @@ def main():
     model = common.load_model()
     nv, nu = model.nv, model.nu
 
-    foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
-    foot_L_geom = model.body_geomadr[foot_L_id]
-    model.geom_contype[foot_L_geom] = 0
-    model.geom_conaffinity[foot_L_geom] = 0
+    foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    foot_R_geom = model.body_geomadr[foot_R_id]
+    model.geom_contype[foot_R_geom] = 0
+    model.geom_conaffinity[foot_R_geom] = 0
 
     qpos_raw = np.load("best_one_leg_qpos.npy")
 

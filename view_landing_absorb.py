@@ -55,10 +55,10 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
-    a_knee_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_L")
-    a_ankle_pitch_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_L")
-    foot_L_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
+    a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
+    a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
+    a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
+    foot_R_body = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
 
     # landing_absorb.py 기본 파라미터 (swing_dur=0.8, land_knee=20)
     lift_knee_deg = 25.0
@@ -94,7 +94,7 @@ def main():
     last_print = -1.0
     with mujoco.viewer.launch_passive(model, data) as viewer:
         while viewer.is_running():
-            fz = foot_fz(model, data, foot_L_body)
+            fz = foot_fz(model, data, foot_R_body)
             vmag = np.linalg.norm(data.qvel[:3])
 
             if phase == "stand" and data.time >= stand_s:
@@ -112,7 +112,7 @@ def main():
                     elif data.time - touch_t0 >= touch_dwell_s:
                         phase = "absorb"
                         absorb_t0 = data.time
-                        knee_at_touch = data.ctrl[a_knee_L]
+                        knee_at_touch = data.ctrl[a_knee_R]
                         print(f"t={data.time:.2f}: absorb 시작 (착지 흡수)")
                 else:
                     touch_t0 = None
@@ -154,10 +154,10 @@ def main():
 
             if phase == "swing":
                 s = min(1.0, (data.time - swing_t0) / swing_duration_s)
-                u[a_hip_L] = math.radians(hip_target_deg) * s
-                u[a_knee_L] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
+                u[a_hip_R] = math.radians(hip_target_deg) * s
+                u[a_knee_R] = math.radians(lift_knee_deg) * (1 - abs(2 * s - 1)) \
                     + math.radians(land_knee_deg) * max(0.0, 2 * s - 1)
-                u[a_ankle_pitch_L] = 0.0
+                u[a_ankle_pitch_R] = 0.0
             elif phase == "absorb":
                 dt = data.time - absorb_t0
                 if dt < absorb_down_s:
@@ -167,8 +167,8 @@ def main():
                 else:
                     su = min(1.0, (dt - absorb_down_s) / absorb_up_s)
                     target = absorb_deep_deg + (land_knee_deg - absorb_deep_deg) * su
-                u[a_knee_L] = math.radians(target)
-                u[a_ankle_pitch_L] = 0.0
+                u[a_knee_R] = math.radians(target)
+                u[a_ankle_pitch_R] = 0.0
 
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u

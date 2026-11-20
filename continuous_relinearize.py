@@ -5,7 +5,7 @@
 발산이 누적되기 전에 계속 따라가면서 잡는다(successive
 linearization, 일종의 저렴한 비선형 제어).
 
-hip_abduct_R에 피드포워드 bias를 계속 걸어서 체중 이동을 유도하고,
+hip_abduct_L에 피드포워드 bias를 계속 걸어서 체중 이동을 유도하고,
 그 위에서 주기적 재선형화가 "안 넘어지게" 잡아주는지 확인한다.
 """
 import math
@@ -37,7 +37,7 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     TARGET_DEG = -20.0
     RAMP_T = 5.0
@@ -69,7 +69,7 @@ def main():
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
             dv = data.qvel - qvel_eq
             x = np.concatenate([dq, dv])
-            # hip_abduct_R은 계속 램프되는 목표(ff)로 직접 몰고(열린 루프),
+            # hip_abduct_L은 계속 램프되는 목표(ff)로 직접 몰고(열린 루프),
             # 나머지는 재선형화된 K로 "지금 기준점 대비 오차"를 교정.
             u = -K @ x
             u[a_abduct_R] = ff

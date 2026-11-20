@@ -38,9 +38,9 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
-    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
+    qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
-    print("=== hip_abduct_L 초기 오프셋(양수 방향) 스윕 ===")
+    print("=== hip_abduct_R 초기 오프셋(양수 방향) 스윕 ===")
     for deg in [1, 2, 3, 4, 5, 6]:
         fell = run_offset(model, K0, qpos_eq0, qvel_eq0, ctrl_limits, qadr_L, deg)
         print(f"offset=+{deg}deg: fell={fell}")

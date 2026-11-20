@@ -8,8 +8,8 @@ qpos_eq0조차 ctrl=0(피드백 없음)이면 4.78초 안에 쓰러진다(원본
 작은 편차를 안정화한다.
 
 이번엔 역기구학(analytic FK)으로 제대로 푼다:
-- 오른다리(hip_abduct_R=θ1만 바꾸고 나머지 오른다리 관절은 서있기
-  값 그대로 유지)로 다리를 기울이면, 발(foot_R)이 원래 서있던
+- 오른다리(hip_abduct_L=θ1만 바꾸고 나머지 오른다리 관절은 서있기
+  값 그대로 유지)로 다리를 기울이면, 발(foot_L)이 원래 서있던
   위치/방향에 그대로 있으려면 **몸통(torso, free joint)이 그만큼
   반대로 기울어야 한다** - 이걸 체인을 직접 행렬로 풀어서 몸통의
   필요한 pos/quat을 계산한다 (수치 최적화나 시뮬레이션 없이 한 번에).
@@ -77,37 +77,37 @@ def main():
     data0.qvel[:] = 0.0
     mujoco.mj_forward(model, data0)
 
-    foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
     foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
-    target_foot_pos = data0.xpos[foot_R_id].copy()
-    target_foot_mat = data0.xmat[foot_R_id].copy().reshape(3, 3)
+    foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    target_foot_pos = data0.xpos[foot_L_id].copy()
+    target_foot_mat = data0.xmat[foot_L_id].copy().reshape(3, 3)
 
     # 왼발을 충돌 비활성화 - 땅과 절대 접촉하지 않게 해서 순수 "오른발
     # 하나로만 지지"하는 조건을 정확히 만든다 (무릎 각도로 클리어런스
     # 맞추는 기하학적 문제를 아예 없앤다)
-    foot_L_geom = model.body_geomadr[foot_L_id]
-    model.geom_contype[foot_L_geom] = 0
-    model.geom_conaffinity[foot_L_geom] = 0
+    foot_R_geom = model.body_geomadr[foot_R_id]
+    model.geom_contype[foot_R_geom] = 0
+    model.geom_conaffinity[foot_R_geom] = 0
 
     def jq(name):
         jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
         return model.jnt_qposadr[jid]
 
-    q_abduct_R = jq("hip_abduct_R")
-    q_hip_R = jq("hip_R")
-    q_knee_R = jq("knee_R")
-    q_ankle_roll_R = jq("ankle_roll_R")
-    q_ankle_pitch_R = jq("ankle_pitch_R")
-    q_abduct_L = jq("hip_abduct_L")
+    q_abduct_R = jq("hip_abduct_L")
     q_hip_L = jq("hip_L")
     q_knee_L = jq("knee_L")
     q_ankle_roll_L = jq("ankle_roll_L")
     q_ankle_pitch_L = jq("ankle_pitch_L")
+    q_abduct_L = jq("hip_abduct_R")
+    q_hip_R = jq("hip_R")
+    q_knee_R = jq("knee_R")
+    q_ankle_roll_R = jq("ankle_roll_R")
+    q_ankle_pitch_R = jq("ankle_pitch_R")
 
-    theta2 = qpos_eq0[q_hip_R]
-    theta3 = qpos_eq0[q_knee_R]
-    theta4 = qpos_eq0[q_ankle_roll_R]
-    theta5 = qpos_eq0[q_ankle_pitch_R]
+    theta2 = qpos_eq0[q_hip_L]
+    theta3 = qpos_eq0[q_knee_L]
+    theta4 = qpos_eq0[q_ankle_roll_L]
+    theta5 = qpos_eq0[q_ankle_pitch_L]
 
     # sanity check: theta1=0 (lean 없음)이면 원래 standing qpos와 같아야 함
     P0_check, R0_check = solve_torso_for_lean(0.0, theta2, theta3, theta4, theta5,
@@ -117,7 +117,7 @@ def main():
           P0_check, qpos_eq0[0:3])
     print("  quat:", q_check, "vs", qpos_eq0[3:7])
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
     q_waist_roll = jq("waist_roll")
     q_waist_pitch = jq("waist_pitch")
     waist_roll_0 = qpos_eq0[q_waist_roll]
@@ -126,7 +126,7 @@ def main():
     total_weight_N = sum(model.body_mass) * 9.81
     print(f"\n전체 몸무게(N): {total_weight_N:.2f} (한 발 평형이면 fz_R이 이 값 근처여야 함)")
 
-    def build_qpos(theta1_deg, waist_roll_delta_deg, waist_pitch_delta_deg, knee_L_deg, hip_L_deg):
+    def build_qpos(theta1_deg, waist_roll_delta_deg, waist_pitch_delta_deg, knee_R_deg, hip_R_deg):
         theta1 = math.radians(theta1_deg)
         P0, R0 = solve_torso_for_lean(theta1, theta2, theta3, theta4, theta5,
                                        target_foot_pos, target_foot_mat)
@@ -137,10 +137,10 @@ def main():
         qpos[q_abduct_R] = theta1
         qpos[q_waist_roll] = waist_roll_0 + math.radians(waist_roll_delta_deg)
         qpos[q_waist_pitch] = waist_pitch_0 + math.radians(waist_pitch_delta_deg)
-        qpos[q_knee_L] = math.radians(knee_L_deg)
-        qpos[q_hip_L] = math.radians(hip_L_deg)
-        qpos[q_ankle_pitch_L] = 0.0
-        qpos[q_ankle_roll_L] = 0.0
+        qpos[q_knee_R] = math.radians(knee_R_deg)
+        qpos[q_hip_R] = math.radians(hip_R_deg)
+        qpos[q_ankle_pitch_R] = 0.0
+        qpos[q_ankle_roll_R] = 0.0
         return qpos
 
     def eval_qpos(qpos):
@@ -153,8 +153,8 @@ def main():
             data.ctrl[i] = qpos[qadr]
         mujoco.mj_forward(model, data)
         qacc_free = data.qacc[0:6].copy()
-        fz_L = foot_fz(model, data, foot_L_id)
-        fz_R = foot_fz(model, data, foot_R_id)
+        fz_L = foot_fz(model, data, foot_R_id)
+        fz_R = foot_fz(model, data, foot_L_id)
         return qacc_free, fz_L, fz_R
 
     print()

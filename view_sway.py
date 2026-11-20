@@ -1,8 +1,8 @@
 """view_sway.py
 ---------------
 발을 떼기 전에 먼저 좌우로 번갈아 체중을 옮기며 흔드는 모습을
-MuJoCo 뷰어로 보여준다. hip_abduct_R(음수 -> 오른쪽으로 체중이동)과
-hip_abduct_L(양수 -> 왼쪽으로 체중이동)을 교대로 써서 "오른쪽 기울기
+MuJoCo 뷰어로 보여준다. hip_abduct_L(음수 -> 오른쪽으로 체중이동)과
+hip_abduct_R(양수 -> 왼쪽으로 체중이동)을 교대로 써서 "오른쪽 기울기
 -> 유지 -> 가운데 -> 왼쪽 기울기 -> 유지 -> 가운데 -> ..." 순환.
 
 각 "유지" 구간에서만 continuous_relinearize3.py의 검증된 메커니즘
@@ -45,16 +45,16 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
 
     LEAN_DEG = 20.0  # 오늘 90초 검증된 크기
     RAMP_T = 5.0
     HOLD_T = 10.0
 
     # 순환: 0(가운데) -> -20(오른쪽) -> 0 -> +20(왼쪽) -> 0 -> 반복
-    # weight_bias: 음수=오른쪽 쏠림(hip_abduct_R에 들어감), 양수=왼쪽
-    # 쏠림(hip_abduct_L에 들어감).
+    # weight_bias: 음수=오른쪽 쏠림(hip_abduct_L에 들어감), 양수=왼쪽
+    # 쏠림(hip_abduct_R에 들어감).
     targets = [-LEAN_DEG, 0.0, LEAN_DEG, 0.0]
 
     data = mujoco.MjData(model)
@@ -73,16 +73,16 @@ def main():
             while viewer.is_running() and (data.time - seg_t0) < RAMP_T:
                 s = (data.time - seg_t0) / RAMP_T
                 bias = prev_bias + (target_bias - prev_bias) * s
-                hip_R_cmd = min(bias, 0.0)
-                hip_L_cmd = max(bias, 0.0)
+                hip_L_cmd = min(bias, 0.0)
+                hip_R_cmd = max(bias, 0.0)
                 for _ in range(2):
                     dq = np.zeros(nv)
                     mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq0, data.qpos)
                     dv = data.qvel - qvel_eq0
                     x = np.concatenate([dq, dv])
                     u = -K0 @ x
-                    u[a_abduct_R] += hip_R_cmd
-                    u[a_abduct_L] += hip_L_cmd
+                    u[a_abduct_R] += hip_L_cmd
+                    u[a_abduct_L] += hip_R_cmd
                     u = np.clip(u, -ctrl_limits, ctrl_limits)
                     data.ctrl[:] = u
                     mujoco.mj_step(model, data)

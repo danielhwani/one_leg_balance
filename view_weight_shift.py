@@ -8,7 +8,7 @@ view_humanoid_stand.py와 같은 이유(디스커버리 문제 없이 바로 확
 실행:
   python view_weight_shift.py
 
-창을 닫으면 종료. 오른다리(hip_abduct_R)가 천천히 기울며 체중을
+창을 닫으면 종료. 오른다리(hip_abduct_L)가 천천히 기울며 체중을
 오른쪽으로 옮기고, 그 뒤로는 1초마다 "지금 상태"를 새 기준점으로
 재선형화하면서 그 자세를 계속 유지한다(README의 교훈 참고).
 """
@@ -45,7 +45,7 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     TARGET_DEG = -20.0
     RAMP_T = 5.0

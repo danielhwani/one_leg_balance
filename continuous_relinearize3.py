@@ -2,7 +2,7 @@
 ------------------------------
 2차 수정: 재선형화 구간에서는 그 시점의 "실제 전체 ctrl"을 trim으로
 삼아 모든 액추에이터에 균일하게 적용(u = ctrl_trim - K@x) - 특정
-관절(hip_abduct_R)에만 따로 ff를 더해서 trim을 이중으로 세는 실수를
+관절(hip_abduct_L)에만 따로 ff를 더해서 trim을 이중으로 세는 실수를
 없앤다. ff(목표 쪽으로 미는 것)는 램프+사전 정착 구간에서만 쓰고,
 재선형화가 시작되면 그 시점에 이미 반영된 값이 trim에 들어있으므로
 따로 더하지 않는다.
@@ -38,7 +38,7 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     TARGET_DEG = -20.0  # 90초 완전 안정 확인된 값 (README 참고)
     RAMP_T = 5.0

@@ -18,10 +18,10 @@ def main():
     def act(name):
         return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
 
-    a_abduct_R = act("act_hip_abduct_R")
-    a_ankle_roll_R = act("act_ankle_roll_R")
+    a_abduct_R = act("act_hip_abduct_L")
     a_ankle_roll_L = act("act_ankle_roll_L")
-    a_abduct_L = act("act_hip_abduct_L")
+    a_ankle_roll_R = act("act_ankle_roll_R")
+    a_abduct_L = act("act_hip_abduct_R")
 
     def run(hip_deg, ankle_deg, ramp_t, total_t=20.0, verbose=False):
         data = mujoco.MjData(model)
@@ -39,7 +39,7 @@ def main():
                 x = np.concatenate([dq, dv])
                 u = -K @ x
                 u[a_abduct_R] += ff_hip
-                u[a_ankle_roll_R] += ff_ankle
+                u[a_ankle_roll_L] += ff_ankle
                 u = np.clip(u, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u
                 mujoco.mj_step(model, data)
@@ -53,7 +53,7 @@ def main():
         zx, zy = common.contact_zmp(model, data)
         return fell, zy, common.tilt_deg(data.qpos)
 
-    print("=== hip_abduct_R/L + ankle_roll_R/L 같이 강제 ===")
+    print("=== hip_abduct_L/L + ankle_roll_L/L 같이 강제 ===")
     for hip_deg, ankle_deg in [(-15, -10), (-15, -15), (-20, -15), (-15, -18), (-10, -18), (-18, -18)]:
         fell, zy, t = run(hip_deg, ankle_deg, ramp_t=5.0)
         print(f"hip={hip_deg} ankle={ankle_deg}: fell={fell} zmp_y={zy:.3f} tilt={t:.2f}")

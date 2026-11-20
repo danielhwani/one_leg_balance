@@ -1,7 +1,7 @@
 """view_sway_forward_back.py
 -----------------------------
 좌우 흔들기(view_sway_continuous.py)와 같은 방식, 앞뒤로 숙이는
-버전. hip_L/hip_R(피치, 양쪽 다리를 같은 방향으로)에 사인파
+버전. hip_R/hip_L(피치, 양쪽 다리를 같은 방향으로)에 사인파
 override를 주고, 나머지는 전부 원래 K0 하나로(재선형화 없음).
 
 실행:
@@ -26,9 +26,9 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
     a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
-    qadr_hip_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_L")]
+    a_hip_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_L")
+    qadr_hip_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_R")]
 
     AMPLITUDE_DEG = 4.0  # K0 범위(+6도/-5도, check_pitch_basin.py) 안에서만
     PERIOD_S = 1.0  # 걸음걸이 수준(150초 검증됨)
@@ -54,8 +54,8 @@ def main():
                 dv = data.qvel - qvel_eq0
                 x = np.concatenate([dq, dv])
                 u = -K0 @ x
-                u[a_hip_L] = bias
                 u[a_hip_R] = bias
+                u[a_hip_L] = bias
                 u = np.clip(u, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u
                 mujoco.mj_step(model, data)
@@ -66,7 +66,7 @@ def main():
             tick += 1
             if tick % print_interval == 0:
                 print(f"    t={data.time:6.2f}s  기울기={common.tilt_deg(data.qpos):5.2f}도  "
-                      f"엉덩이피치={math.degrees(data.qpos[qadr_hip_L]):+6.2f}도")
+                      f"엉덩이피치={math.degrees(data.qpos[qadr_hip_R]):+6.2f}도")
 
 
 if __name__ == "__main__":
