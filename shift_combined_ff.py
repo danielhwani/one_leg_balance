@@ -18,10 +18,10 @@ def main():
     def act(name):
         return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
 
-    a_abduct_R = act("act_hip_abduct_L")
+    a_abduct_L = act("act_hip_abduct_L")
     a_ankle_roll_L = act("act_ankle_roll_L")
     a_ankle_roll_R = act("act_ankle_roll_R")
-    a_abduct_L = act("act_hip_abduct_R")
+    a_abduct_R = act("act_hip_abduct_R")
 
     def run(hip_deg, ankle_deg, ramp_t, total_t=20.0, verbose=False):
         data = mujoco.MjData(model)
@@ -38,7 +38,7 @@ def main():
                 dv = data.qvel - qvel_eq0
                 x = np.concatenate([dq, dv])
                 u = -K @ x
-                u[a_abduct_R] += ff_hip
+                u[a_abduct_L] += ff_hip
                 u[a_ankle_roll_L] += ff_ankle
                 u = np.clip(u, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u

@@ -52,8 +52,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
     qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
     qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
@@ -149,9 +149,9 @@ def main():
                 step(K0, qpos_eq0, qvel_eq0, np.zeros(nu), realtime=False)
             return True
 
-        if not lean_and_return(a_abduct_R, -1.0, "오른쪽"):
+        if not lean_and_return(a_abduct_L, -1.0, "오른쪽"):
             return
-        if not lean_and_return(a_abduct_L, 1.0, "왼쪽"):
+        if not lean_and_return(a_abduct_R, 1.0, "왼쪽"):
             return
 
         print("데모 끝 - 계속 똑바로 서있는 모습을 보실 수 있습니다 (창을 닫으면 종료).")

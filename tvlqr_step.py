@@ -80,6 +80,22 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
+    # 전신 균형(torso) 비용이 지배적이라 스윙 다리(로봇의 오른쪽 다리)
+    # 관절은 궤적을 거의 안 따라가고 처져 있었다(무릎 목표 7도일 때
+    # 실제 3도) - 사용자가 뷰어로 직접 확인. 스윙 다리 관절의 위치/
+    # 속도 추적 오차에 가중치를 크게 줘서 궤적을 제대로 따라가게 한다.
+    swing_joint_names = ["hip_abduct_R", "hip_R", "knee_R"]
+    SWING_TRACK_WEIGHT = 30.0
+    for jname in swing_joint_names:
+        jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, jname)
+        # Q는 2*nv(접선/속도 공간) 크기 - dq(mj_differentiatePos 결과)와
+        # qvel 둘 다 dofadr 기준이지 qposadr 기준이 아니다(freejoint가
+        # qpos 7칸, dof 6칸으로 어긋나서 힌지 조인트도 뒤로 갈수록
+        # 둘이 달라짐).
+        dofadr = model.jnt_dofadr[jid]
+        Q[dofadr, dofadr] *= SWING_TRACK_WEIGHT
+        Q[nv + dofadr, nv + dofadr] *= SWING_TRACK_WEIGHT
+
     T_transition = 4.0
     n_wp = 40
     wps = build_waypoints(qpos_eq0, qpos_eq1, n_wp)
@@ -119,6 +135,15 @@ def main():
 
     dt_wp = T_transition / n_wp
 
+    # 궤적이 실제로 요구하는 속도(피드포워드) - 이게 없으면 "목표를
+    # 향해 움직여라"(위치 오차)와 "속도는 0이어야 한다"(dv=v-0)는
+    # 명령이 계속 서로 싸운다. 웨이포인트 구간마다 그 구간을 통과하는
+    # 데 필요한 속도를 미리 계산해둔다.
+    # 시도해봤지만(아래 qvel_ref 피드포워드) 오히려 더 나빠졌다(1.1~1.2초만에
+    # 쓰러짐, 즉시 반대 방향으로 튐) - 30배 올려둔 Q 가중치와 얽혀서
+    # 역효과가 난 것으로 보임. dv=qvel-0(속도 목표 항상 0)으로 원복.
+    qvel_ref_list = [np.zeros(nv) for _ in range(n_wp)]
+
     def run(duration_s, hold_s, verbose_every=10, tag=""):
         data = mujoco.MjData(model)
         data.qpos[:] = qpos_eq0
@@ -134,14 +159,16 @@ def main():
                 qpos_ref[3:7] = slerp_lerp_quat(wps[k][3:7], wps[k + 1][3:7], s_local)
                 ctrl_ref = (1 - s_local) * ctrl_wps[k] + s_local * ctrl_wps[k + 1]
                 K = K_list[k]
+                qvel_ref = qvel_ref_list[k]
             else:
                 qpos_ref = qpos_eq1
                 ctrl_ref = ctrl_wps[-1]
                 K = K1
+                qvel_ref = np.zeros(nv)
 
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_ref, data.qpos)
-            dv = data.qvel - 0.0
+            dv = data.qvel - qvel_ref
             x = np.concatenate([dq, dv])
             u = ctrl_ref - K @ x
             u = np.clip(u, -ctrl_limits, ctrl_limits)
@@ -151,8 +178,13 @@ def main():
 
             tilt = common.tilt_deg(data.qpos)
             if tick % verbose_every == 0:
+                q_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "knee_R")
+                knee_adr = model.jnt_qposadr[q_knee_R]
+                knee_actual = math.degrees(data.qpos[knee_adr])
+                knee_target = math.degrees(qpos_ref[knee_adr])
                 print(f"  [{tag}] t={data.time:.2f} tilt={tilt:6.2f} "
-                      f"|v|={np.linalg.norm(data.qvel[:3]):.4f}")
+                      f"|v|={np.linalg.norm(data.qvel[:3]):.4f} "
+                      f"knee_actual={knee_actual:5.1f} knee_target={knee_target:5.1f}")
             if tilt > 55:
                 fell = data.time
                 print(f"[{tag}] 쓰러짐: t={fell:.2f}")

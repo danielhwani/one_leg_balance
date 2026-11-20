@@ -14,7 +14,7 @@ def main():
     def act(name):
         return mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
 
-    a_abduct_R = act("act_hip_abduct_L")
+    a_abduct_L = act("act_hip_abduct_L")
     a_ankle_roll_L = act("act_ankle_roll_L")
     a_ankle_roll_R = act("act_ankle_roll_R")
     a_ankle_pitch_L = act("act_ankle_pitch_L")
@@ -41,7 +41,7 @@ def main():
             ankle_pitch_fb = -KP_PITCH * pitch_err - KD_PITCH * pitch_rate
 
             u = np.zeros(nu)
-            u[a_abduct_R] = math.radians(TARGET_LEAN_DEG) * s
+            u[a_abduct_L] = math.radians(TARGET_LEAN_DEG) * s
             u[a_ankle_roll_L] = np.clip(ankle_roll_fb, -0.35, 0.35)
             u[a_ankle_roll_R] = np.clip(ankle_roll_fb, -0.35, 0.35)
             u[a_ankle_pitch_L] = np.clip(ankle_pitch_fb, -0.43, 0.43)

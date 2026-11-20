@@ -45,7 +45,7 @@ def foot_fz(model, data, body_id):
     return total
 
 
-def try_pose(model, qpos_eq0, qvel_eq0, a_abduct_R, a_ankle_roll_L,
+def try_pose(model, qpos_eq0, qvel_eq0, a_abduct_L, a_ankle_roll_L,
              a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
              lean_deg, ankle_roll_deg, knee_R_deg, hip_R_deg,
              sim_s=3.0, verbose=False):
@@ -55,7 +55,7 @@ def try_pose(model, qpos_eq0, qvel_eq0, a_abduct_R, a_ankle_roll_L,
     mujoco.mj_forward(model, data)
 
     ctrl = np.zeros(model.nu)
-    ctrl[a_abduct_R] = math.radians(lean_deg)
+    ctrl[a_abduct_L] = math.radians(lean_deg)
     ctrl[a_ankle_roll_L] = math.radians(ankle_roll_deg)
     ctrl[a_knee_R] = math.radians(knee_R_deg)
     ctrl[a_hip_R] = math.radians(hip_R_deg)
@@ -67,7 +67,7 @@ def try_pose(model, qpos_eq0, qvel_eq0, a_abduct_R, a_ankle_roll_L,
     for tick in range(int(sim_s / model.opt.timestep)):
         s = min(1.0, data.time / ramp_s)
         cur = data.ctrl.copy()
-        cur[a_abduct_R] = math.radians(lean_deg) * s
+        cur[a_abduct_L] = math.radians(lean_deg) * s
         cur[a_ankle_roll_L] = math.radians(ankle_roll_deg) * s
         cur[a_knee_R] = math.radians(knee_R_deg) * s
         cur[a_hip_R] = math.radians(hip_R_deg) * s
@@ -90,7 +90,7 @@ def main():
     model = common.load_model()
     qpos_eq0, qvel_eq0 = common.find_equilibrium(model)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
     a_ankle_roll_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_roll_L")
     a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
     a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
@@ -104,7 +104,7 @@ def main():
             ankle_roll_deg = -lean_deg
             hip_R_deg = 0.0
             fz_final, tilt_final, max_tilt, vmag, qpos_f, qvel_f, ctrl_f = try_pose(
-                model, qpos_eq0, qvel_eq0, a_abduct_R, a_ankle_roll_L,
+                model, qpos_eq0, qvel_eq0, a_abduct_L, a_ankle_roll_L,
                 a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
                 lean_deg, ankle_roll_deg, knee_R_deg, hip_R_deg, sim_s=3.0)
             lifted = fz_final < 1.0

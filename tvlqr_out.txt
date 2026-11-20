@@ -5,29 +5,31 @@ qpos_eq1에서 foot_R z=0.8548, foot_L z=-0.0008
 TV-LQR 게인 계산 완료
 
 === TV-LQR로 standing -> one-leg 전이 (왼발 충돌 켠 채로) ===
-  [tvlqr] t=0.01 tilt=  0.01 |v|=0.0007
-  [tvlqr] t=0.11 tilt=  0.02 |v|=0.0065
-  [tvlqr] t=0.21 tilt=  0.04 |v|=0.0032
-  [tvlqr] t=0.31 tilt=  0.01 |v|=0.0084
-  [tvlqr] t=0.41 tilt=  0.01 |v|=0.0101
-  [tvlqr] t=0.51 tilt=  0.01 |v|=0.0126
-  [tvlqr] t=0.61 tilt=  0.02 |v|=0.0137
-  [tvlqr] t=0.71 tilt=  0.02 |v|=0.0178
-  [tvlqr] t=0.81 tilt=  0.03 |v|=0.0201
-  [tvlqr] t=0.91 tilt=  0.05 |v|=0.0280
-  [tvlqr] t=1.01 tilt=  0.17 |v|=0.0446
-  [tvlqr] t=1.11 tilt=  0.37 |v|=0.3651
-  [tvlqr] t=1.21 tilt=  3.01 |v|=0.5117
-  [tvlqr] t=1.31 tilt=  6.33 |v|=0.3470
-  [tvlqr] t=1.41 tilt=  9.03 |v|=0.6704
-  [tvlqr] t=1.51 tilt=  8.05 |v|=0.5314
-  [tvlqr] t=1.61 tilt=  7.91 |v|=0.5182
-  [tvlqr] t=1.71 tilt= 11.04 |v|=0.4491
-  [tvlqr] t=1.81 tilt=  9.11 |v|=0.9295
-  [tvlqr] t=1.91 tilt=  6.68 |v|=1.7990
-  [tvlqr] t=2.01 tilt= 11.15 |v|=2.6317
-  [tvlqr] t=2.11 tilt= 18.25 |v|=2.6828
-  [tvlqr] t=2.21 tilt= 28.67 |v|=2.5770
-  [tvlqr] t=2.31 tilt= 39.01 |v|=3.0713
-  [tvlqr] t=2.41 tilt= 54.07 |v|=3.8358
-[tvlqr] 쓰러짐: t=2.42
+  [tvlqr] t=0.01 tilt=  0.01 |v|=0.0006 knee_actual= -0.0 knee_target= -0.0
+  [tvlqr] t=0.11 tilt=  0.02 |v|=0.0075 knee_actual= -0.0 knee_target=  0.1
+  [tvlqr] t=0.21 tilt=  0.04 |v|=0.0058 knee_actual= -0.0 knee_target=  0.3
+  [tvlqr] t=0.31 tilt=  0.01 |v|=0.0100 knee_actual=  0.0 knee_target=  0.7
+  [tvlqr] t=0.41 tilt=  0.01 |v|=0.0094 knee_actual=  0.2 knee_target=  1.3
+  [tvlqr] t=0.51 tilt=  0.01 |v|=0.0098 knee_actual=  0.6 knee_target=  1.9
+  [tvlqr] t=0.61 tilt=  0.02 |v|=0.0097 knee_actual=  1.1 knee_target=  2.7
+  [tvlqr] t=0.71 tilt=  0.03 |v|=0.0081 knee_actual=  1.7 knee_target=  3.6
+  [tvlqr] t=0.81 tilt=  0.05 |v|=0.0038 knee_actual=  2.5 knee_target=  4.7
+  [tvlqr] t=0.91 tilt=  0.08 |v|=0.0081 knee_actual=  3.4 knee_target=  5.8
+  [tvlqr] t=1.01 tilt=  0.35 |v|=0.0288 knee_actual=  4.0 knee_target=  7.0
+  [tvlqr] t=1.11 tilt=  0.02 |v|=0.4572 knee_actual=  4.2 knee_target=  8.3
+  [tvlqr] t=1.21 tilt=  2.14 |v|=0.1584 knee_actual=  2.3 knee_target=  9.7
+  [tvlqr] t=1.31 tilt=  1.91 |v|=0.4757 knee_actual=  2.0 knee_target= 11.2
+  [tvlqr] t=1.41 tilt=  2.06 |v|=0.6408 knee_actual=  1.9 knee_target= 12.7
+  [tvlqr] t=1.51 tilt=  2.99 |v|=0.5006 knee_actual=  2.9 knee_target= 14.2
+  [tvlqr] t=1.61 tilt=  4.65 |v|=0.6508 knee_actual=  5.7 knee_target= 15.8
+  [tvlqr] t=1.71 tilt=  3.50 |v|=0.3442 knee_actual=  6.6 knee_target= 17.5
+  [tvlqr] t=1.81 tilt=  5.34 |v|=0.2936 knee_actual=  7.4 knee_target= 19.1
+  [tvlqr] t=1.91 tilt=  2.63 |v|=0.6314 knee_actual=  9.4 knee_target= 20.8
+  [tvlqr] t=2.01 tilt=  8.00 |v|=0.7877 knee_actual= 12.3 knee_target= 22.5
+  [tvlqr] t=2.11 tilt= 14.54 |v|=0.7141 knee_actual= 22.1 knee_target= 24.2
+  [tvlqr] t=2.21 tilt= 19.26 |v|=0.9845 knee_actual= 32.4 knee_target= 25.9
+  [tvlqr] t=2.31 tilt= 25.60 |v|=1.0679 knee_actual= 36.2 knee_target= 27.5
+  [tvlqr] t=2.41 tilt= 35.98 |v|=1.4772 knee_actual= 40.4 knee_target= 29.2
+  [tvlqr] t=2.51 tilt= 45.23 |v|=1.8586 knee_actual= 60.6 knee_target= 30.8
+  [tvlqr] t=2.61 tilt= 53.60 |v|=2.2210 knee_actual= 73.5 knee_target= 32.3
+[tvlqr] 쓰러짐: t=2.63

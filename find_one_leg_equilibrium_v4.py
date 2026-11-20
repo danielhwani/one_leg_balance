@@ -50,12 +50,12 @@ def main():
         jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
         return model.jnt_qposadr[jid]
 
-    q_abduct_R = jq("hip_abduct_L")
+    q_abduct_L = jq("hip_abduct_L")
     q_hip_L = jq("hip_L")
     q_knee_L = jq("knee_L")
     q_ankle_roll_L = jq("ankle_roll_L")
     q_ankle_pitch_L = jq("ankle_pitch_L")
-    q_abduct_L = jq("hip_abduct_R")
+    q_abduct_R = jq("hip_abduct_R")
     q_hip_R = jq("hip_R")
     q_knee_R = jq("knee_R")
     q_ankle_pitch_R = jq("ankle_pitch_R")
@@ -72,9 +72,9 @@ def main():
 
     # 왼다리 들기 파라미터는 고정 (서있는 골반 기준으로 ~38cm 클리어런스
     # 확인된 넉넉한 값) - 균형 잡느라 골반이 내려가도 여유가 있도록
-    ABDUCT_L_DEG = -25.0
-    KNEE_L_DEG = 45.0
-    HIP_L_DEG = 15.0
+    ABDUCT_R_DEG = -25.0
+    KNEE_R_DEG = 45.0
+    HIP_R_DEG = 15.0
 
     def build_qpos(p):
         theta1_deg, wroll_deg, wpitch_deg = p
@@ -85,12 +85,12 @@ def main():
         qpos = qpos_eq0.copy()
         qpos[0:3] = P0
         qpos[3:7] = quat0
-        qpos[q_abduct_R] = theta1
+        qpos[q_abduct_L] = theta1
         qpos[q_waist_roll] = waist_roll_0 + math.radians(wroll_deg)
         qpos[q_waist_pitch] = waist_pitch_0 + math.radians(wpitch_deg)
-        qpos[q_knee_R] = math.radians(KNEE_L_DEG)
-        qpos[q_hip_R] = math.radians(HIP_L_DEG)
-        qpos[q_abduct_L] = math.radians(ABDUCT_L_DEG)
+        qpos[q_knee_R] = math.radians(KNEE_R_DEG)
+        qpos[q_hip_R] = math.radians(HIP_R_DEG)
+        qpos[q_abduct_R] = math.radians(ABDUCT_R_DEG)
         qpos[q_ankle_pitch_R] = 0.0
         qpos[q_ankle_roll_R] = 0.0
         return qpos

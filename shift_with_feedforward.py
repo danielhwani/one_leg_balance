@@ -15,7 +15,7 @@ def main():
     K = common.solve_dare(A, B, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     TARGET_DEG = -20.0
     RAMP_T = 5.0
@@ -34,7 +34,7 @@ def main():
             dv = data.qvel - qvel_eq0
             x = np.concatenate([dq, dv])
             u = -K @ x
-            u[a_abduct_R] += ff
+            u[a_abduct_L] += ff
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)

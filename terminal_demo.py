@@ -50,8 +50,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
     qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
     qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
@@ -115,8 +115,8 @@ def main():
         print(f"\n=== {label} 유지 끝 -> 원래 K0로 전환, 똑바로 서는 중 ({STAND_T:.0f}초) ===")
         run_phase(STAND_T, lambda tick, n: step(K0, qpos_eq0, qvel_eq0, np.zeros(nu)), print_every=5.0)
 
-    lean_and_return(a_abduct_R, -1.0, "오른쪽")
-    lean_and_return(a_abduct_L, 1.0, "왼쪽")
+    lean_and_return(a_abduct_L, -1.0, "오른쪽")
+    lean_and_return(a_abduct_R, 1.0, "왼쪽")
 
     print("\n데모 끝 - 계속 똑바로 서있는 상태입니다.")
     print(status_line())

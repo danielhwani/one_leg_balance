@@ -39,7 +39,7 @@ def main():
         jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, name)
         return model.jnt_qposadr[jid]
 
-    q_abduct_R = jq("hip_abduct_L")
+    q_abduct_L = jq("hip_abduct_L")
     q_hip_L = jq("hip_L")
     q_knee_L = jq("knee_L")
     q_ankle_roll_L = jq("ankle_roll_L")
@@ -67,7 +67,7 @@ def main():
         qpos = qpos_eq0.copy()
         qpos[0:3] = P0
         qpos[3:7] = quat0
-        qpos[q_abduct_R] = theta1
+        qpos[q_abduct_L] = theta1
         qpos[q_waist_roll] = waist_roll_0 + math.radians(wroll_deg)
         qpos[q_waist_pitch] = waist_pitch_0 + math.radians(wpitch_deg)
         qpos[q_knee_R] = math.radians(kneeL_deg)

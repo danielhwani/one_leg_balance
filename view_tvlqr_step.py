@@ -37,6 +37,14 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
+    swing_joint_names = ["hip_abduct_R", "hip_R", "knee_R"]
+    SWING_TRACK_WEIGHT = 30.0
+    for jname in swing_joint_names:
+        jid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, jname)
+        dofadr = model.jnt_dofadr[jid]
+        Q[dofadr, dofadr] *= SWING_TRACK_WEIGHT
+        Q[nv + dofadr, nv + dofadr] *= SWING_TRACK_WEIGHT
+
     T_transition = 4.0
     n_wp = 40
     wps = build_waypoints(qpos_eq0, qpos_eq1, n_wp)
@@ -71,6 +79,14 @@ def main():
     data.qpos[:] = qpos_eq0
     data.qvel[:] = qvel_eq0
     mujoco.mj_forward(model, data)
+
+    # 좌우 혼동을 없애기 위해 스윙 다리(코드상 _R = 로봇 자신의
+    # 오른쪽 다리, 오늘 계속 작업해온 그 다리)를 빨간색으로 칠한다 -
+    # "빨간 다리가 어느 쪽인지"로만 확인하면 헷갈릴 일이 없다.
+    for bname in ["leg_R", "shin_R", "foot_R"]:
+        bid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, bname)
+        for gi in range(model.body_geomadr[bid], model.body_geomadr[bid] + model.body_geomnum[bid]):
+            model.geom_rgba[gi] = [0.9, 0.1, 0.1, 1.0]
 
     last_print = -1.0
     with mujoco.viewer.launch_passive(model, data) as viewer:

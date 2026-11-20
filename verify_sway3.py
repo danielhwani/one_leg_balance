@@ -42,8 +42,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
 
     LEAN_DEG = 20.0
     RAMP_T = 5.0
@@ -61,8 +61,8 @@ def main():
     def step_with(K, qpos_eq, qvel_eq, ctrl_trim_base, hip_L_cmd, hip_R_cmd):
         nonlocal fell
         ctrl_trim_eff = ctrl_trim_base.copy()
-        ctrl_trim_eff[a_abduct_R] = hip_L_cmd
-        ctrl_trim_eff[a_abduct_L] = hip_R_cmd
+        ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+        ctrl_trim_eff[a_abduct_R] = hip_R_cmd
         for _ in range(2):
             dq = np.zeros(nv)
             mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
@@ -134,8 +134,8 @@ def main():
         #    오차(x)가 갑자기 커지지 않고 램프 내내 작게 유지된다
         #    (갑자기 통째로 전환하면 K0가 큰 오차를 보고 충격을 줌 -
         #    오늘 찾은 버그).
-        start_R = actual_trim[a_abduct_R]
-        start_L = actual_trim[a_abduct_L]
+        start_R = actual_trim[a_abduct_L]
+        start_L = actual_trim[a_abduct_R]
         qpos_lean = data.qpos.copy()
         for tick in range(n_ramp):
             s = tick / n_ramp

@@ -15,7 +15,7 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     # 1단계: K0 + 피드포워드로 "거의 정적인 체중이동 상태"까지 이동.
     TARGET_DEG = -20.0
@@ -34,7 +34,7 @@ def main():
             dv = data.qvel - qvel_eq0
             x = np.concatenate([dq, dv])
             u = -K0 @ x
-            u[a_abduct_R] += ff
+            u[a_abduct_L] += ff
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)
@@ -58,7 +58,7 @@ def main():
     data_lin.qpos[:] = qpos_eq1
     data_lin.qvel[:] = qvel_eq1
     data_lin.ctrl[:] = 0.0
-    data_lin.ctrl[a_abduct_R] = ff_final
+    data_lin.ctrl[a_abduct_L] = ff_final
     mujoco.mj_forward(model, data_lin)
     A1 = np.zeros((2 * nv, 2 * nv))
     B1 = np.zeros((2 * nv, nu))
@@ -77,7 +77,7 @@ def main():
             dv = data.qvel - qvel_eq1
             x = np.concatenate([dq, dv])
             u = -K1 @ x
-            u[a_abduct_R] += ff_final
+            u[a_abduct_L] += ff_final
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)

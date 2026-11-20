@@ -50,7 +50,7 @@ def foot_fz(model, data, body_id):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
+        a_abduct_L, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         shift_deg, shift_ramp_s, shift_settle_s,
         lift_knee_deg, land_knee_deg, hip_target_deg, swing_duration_s,
         touch_fz=5.0, touch_dwell_s=0.02,
@@ -121,7 +121,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                 x = np.concatenate([dq, dv])
                 u = -K0 @ x
                 s_shift = min(1.0, data.time / shift_ramp_s)
-                u[a_abduct_R] += math.radians(shift_deg) * s_shift
+                u[a_abduct_L] += math.radians(shift_deg) * s_shift
             elif phase == "swing":
                 u = trim_at_liftoff.copy()
             elif phase == "absorb":
@@ -130,7 +130,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
                 dv = data.qvel - qvel_eq0
                 x = np.concatenate([dq, dv])
                 u = -K0 @ x
-                u[a_abduct_R] += math.radians(shift_deg)
+                u[a_abduct_L] += math.radians(shift_deg)
             else:  # landed
                 dq = np.zeros(nv)
                 mujoco.mj_differentiatePos(model, dq, 1.0, qpos_eq, data.qpos)
@@ -180,7 +180,7 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
     a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
     a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
     a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
@@ -190,7 +190,7 @@ def main():
     for swing_dur in [0.3, 0.5, 0.8, 1.2]:
         liftoff, landed, fell = run(
             model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-            a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
+            a_abduct_L, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
             shift_deg=-20.0, shift_ramp_s=5.0, shift_settle_s=5.0,
             lift_knee_deg=25.0, land_knee_deg=20.0, hip_target_deg=15.0,
             swing_duration_s=swing_dur, duration_s=22.0)
@@ -199,7 +199,7 @@ def main():
     print()
     print("=== 상세 추적: swing_dur=0.5 ===")
     run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
+        a_abduct_L, a_hip_R, a_knee_R, a_ankle_pitch_R, foot_R_body,
         shift_deg=-20.0, shift_ramp_s=5.0, shift_settle_s=5.0,
         lift_knee_deg=25.0, land_knee_deg=20.0, hip_target_deg=15.0,
         swing_duration_s=0.5, duration_s=14.0, verbose=True)

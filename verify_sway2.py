@@ -38,8 +38,8 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
-    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
     qadr_R = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_L")]
     qadr_L = model.jnt_qposadr[mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "hip_abduct_R")]
 
@@ -66,7 +66,7 @@ def main():
 
     def run_segment(seconds, bias_fn, verbose_tag, relin_during=False):
         nonlocal fell, K, qpos_eq, qvel_eq, ctrl_trim
-        print(f"  >>> {verbose_tag} 시작: ctrl_trim[R]={math.degrees(ctrl_trim[a_abduct_R]):.2f}deg "
+        print(f"  >>> {verbose_tag} 시작: ctrl_trim[R]={math.degrees(ctrl_trim[a_abduct_L]):.2f}deg "
               f"K_norm={np.linalg.norm(K):.3f} qpos_eq[R]={math.degrees(qpos_eq[qadr_R]):.2f}deg "
               f"qvel_eq_norm={np.linalg.norm(qvel_eq):.4f} actual_qpos[R]={math.degrees(data.qpos[qadr_R]):.2f}deg")
         n = int(seconds / 0.01)
@@ -89,8 +89,8 @@ def main():
             # ctrl 쪽만 해당 관절 절대값으로 덮어쓴다(K@x는 그대로
             # 섞임 - 완전 배제/기준점 추적 둘 다 오히려 더 나빴다).
             ctrl_trim_eff = ctrl_trim.copy()
-            ctrl_trim_eff[a_abduct_R] = hip_L_cmd
-            ctrl_trim_eff[a_abduct_L] = hip_R_cmd
+            ctrl_trim_eff[a_abduct_L] = hip_L_cmd
+            ctrl_trim_eff[a_abduct_R] = hip_R_cmd
             kx_R_dbg = 0.0
             for _ in range(2):
                 dq = np.zeros(nv)
@@ -98,7 +98,7 @@ def main():
                 dv = data.qvel - qvel_eq
                 x = np.concatenate([dq, dv])
                 Kx = K @ x
-                kx_R_dbg = Kx[a_abduct_R]
+                kx_R_dbg = Kx[a_abduct_L]
                 u = np.clip(ctrl_trim_eff - Kx, -ctrl_limits, ctrl_limits)
                 data.ctrl[:] = u
                 mujoco.mj_step(model, data)
@@ -163,7 +163,7 @@ def main():
         # 재선형화가 반복되면서 trim이 서서히 줄어들 수 있어서(README의
         # "체중이동이 지워지는 현상"), 그 차이를 무시하면 다음 램프
         # 시작에 큰 불연속이 생긴다(오늘 찾은 버그).
-        prev_bias = ctrl_trim[a_abduct_R] if ctrl_trim[a_abduct_R] < 0 else ctrl_trim[a_abduct_L]
+        prev_bias = ctrl_trim[a_abduct_L] if ctrl_trim[a_abduct_L] < 0 else ctrl_trim[a_abduct_R]
 
     if fell:
         print("FELL at t=%.2f" % fell)

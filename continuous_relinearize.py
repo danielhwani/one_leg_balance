@@ -37,7 +37,7 @@ def main():
     Q, R = common.build_cost_two_leg(model)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
 
     TARGET_DEG = -20.0
     RAMP_T = 5.0
@@ -72,7 +72,7 @@ def main():
             # hip_abduct_L은 계속 램프되는 목표(ff)로 직접 몰고(열린 루프),
             # 나머지는 재선형화된 K로 "지금 기준점 대비 오차"를 교정.
             u = -K @ x
-            u[a_abduct_R] = ff
+            u[a_abduct_L] = ff
             u = np.clip(u, -ctrl_limits, ctrl_limits)
             data.ctrl[:] = u
             mujoco.mj_step(model, data)

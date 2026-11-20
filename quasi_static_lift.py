@@ -33,7 +33,7 @@ def relinearize_at(model, qpos, ctrl, Q, R):
 
 
 def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-        a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R,
+        a_abduct_L, a_hip_R, a_knee_R, a_ankle_pitch_R,
         weight_shift_deg, lift_knee_deg, hip_target_deg,
         lift_duration_s, relin_interval=0.2, duration_s=30.0, verbose=False):
     nv = model.nv
@@ -63,7 +63,7 @@ def run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
             x = np.concatenate([dq, dv])
             u = ctrl_trim - K @ x
 
-            u[a_abduct_R] += math.radians(weight_shift_deg) * s
+            u[a_abduct_L] += math.radians(weight_shift_deg) * s
             u[a_hip_R] = math.radians(hip_target_deg) * s
             u[a_knee_R] = math.radians(lift_knee_deg) * s
             u[a_ankle_pitch_R] = 0.0
@@ -90,7 +90,7 @@ def main():
     K0 = common.solve_dare(A0, B0, Q, R)
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
-    a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
+    a_abduct_L = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_L")
     a_hip_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_R")
     a_knee_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_knee_R")
     a_ankle_pitch_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_ankle_pitch_R")
@@ -98,7 +98,7 @@ def main():
     print("=== 무릎만 단독으로(체중이동 없음), lift_duration 스윕 ===")
     for lift_dur in [5.0, 10.0, 20.0, 40.0]:
         fell = run(model, K0, qpos_eq0, qvel_eq0, Q, R, ctrl_limits,
-                   a_abduct_R, a_hip_R, a_knee_R, a_ankle_pitch_R,
+                   a_abduct_L, a_hip_R, a_knee_R, a_ankle_pitch_R,
                    weight_shift_deg=0.0, lift_knee_deg=30.0, hip_target_deg=0.0,
                    lift_duration_s=lift_dur, relin_interval=0.1, duration_s=lift_dur + 20.0)
         knee_at_fail = 30.0 * fell / lift_dur if fell else None
