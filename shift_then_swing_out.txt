@@ -1,0 +1,125 @@
+=== 체중이동(-20도) 먼저, 그 다음 스윙 - swing_duration 스윕 ===
+swing_dur= 0.3: liftoff=11.70000000000043 landed=None fell=11.90000000000046
+swing_dur= 0.5: liftoff=None landed=None fell=11.790000000000443
+swing_dur= 0.8: liftoff=11.77000000000044 landed=None fell=11.980000000000473
+swing_dur= 1.2: liftoff=None landed=None fell=11.940000000000467
+
+=== 상세 추적: swing_dur=0.5 ===
+  t=0.01 phase=shift   fz_L=  72.56 tilt= 0.01 |v|=0.0012
+  t=0.11 phase=shift   fz_L=  73.84 tilt= 0.01 |v|=0.0014
+  t=0.21 phase=shift   fz_L=  75.33 tilt= 0.01 |v|=0.0024
+  t=0.31 phase=shift   fz_L=  76.25 tilt= 0.01 |v|=0.0034
+  t=0.41 phase=shift   fz_L=  76.63 tilt= 0.01 |v|=0.0044
+  t=0.51 phase=shift   fz_L=  76.56 tilt= 0.01 |v|=0.0052
+  t=0.61 phase=shift   fz_L=  76.21 tilt= 0.01 |v|=0.0059
+  t=0.71 phase=shift   fz_L=  75.71 tilt= 0.01 |v|=0.0064
+  t=0.81 phase=shift   fz_L=  75.16 tilt= 0.01 |v|=0.0069
+  t=0.91 phase=shift   fz_L=  74.61 tilt= 0.01 |v|=0.0072
+  t=1.01 phase=shift   fz_L=  74.10 tilt= 0.01 |v|=0.0074
+  t=1.11 phase=shift   fz_L=  73.65 tilt= 0.01 |v|=0.0076
+  t=1.21 phase=shift   fz_L=  73.26 tilt= 0.02 |v|=0.0077
+  t=1.31 phase=shift   fz_L=  72.89 tilt= 0.02 |v|=0.0079
+  t=1.41 phase=shift   fz_L=  72.43 tilt= 0.02 |v|=0.0074
+  t=1.51 phase=shift   fz_L=  72.45 tilt= 0.02 |v|=0.0081
+  t=1.61 phase=shift   fz_L=  72.84 tilt= 0.02 |v|=0.0079
+  t=1.71 phase=shift   fz_L=  71.65 tilt= 0.02 |v|=0.0080
+  t=1.81 phase=shift   fz_L=  72.16 tilt= 0.02 |v|=0.0084
+  t=1.91 phase=shift   fz_L=  72.67 tilt= 0.02 |v|=0.0081
+  t=2.01 phase=shift   fz_L=  72.59 tilt= 0.02 |v|=0.0080
+  t=2.11 phase=shift   fz_L=  72.32 tilt= 0.02 |v|=0.0082
+  t=2.21 phase=shift   fz_L=  71.44 tilt= 0.02 |v|=0.0079
+  t=2.31 phase=shift   fz_L=  72.46 tilt= 0.02 |v|=0.0083
+  t=2.41 phase=shift   fz_L=  72.82 tilt= 0.02 |v|=0.0084
+  t=2.51 phase=shift   fz_L=  72.44 tilt= 0.02 |v|=0.0080
+  t=2.61 phase=shift   fz_L=  73.65 tilt= 0.02 |v|=0.0082
+  t=2.71 phase=shift   fz_L=  72.76 tilt= 0.03 |v|=0.0082
+  t=2.81 phase=shift   fz_L=  75.17 tilt= 0.03 |v|=0.0080
+  t=2.91 phase=shift   fz_L=  75.20 tilt= 0.03 |v|=0.0082
+  t=3.01 phase=shift   fz_L=  74.78 tilt= 0.03 |v|=0.0080
+  t=3.11 phase=shift   fz_L=  75.51 tilt= 0.03 |v|=0.0079
+  t=3.21 phase=shift   fz_L=  76.10 tilt= 0.04 |v|=0.0079
+  t=3.31 phase=shift   fz_L=  76.66 tilt= 0.04 |v|=0.0080
+  t=3.41 phase=shift   fz_L=  77.58 tilt= 0.04 |v|=0.0078
+  t=3.51 phase=shift   fz_L=  78.25 tilt= 0.05 |v|=0.0077
+  t=3.61 phase=shift   fz_L=  78.92 tilt= 0.05 |v|=0.0078
+  t=3.71 phase=shift   fz_L=  81.07 tilt= 0.05 |v|=0.0076
+  t=3.81 phase=shift   fz_L=  80.32 tilt= 0.06 |v|=0.0079
+  t=3.91 phase=shift   fz_L=  79.62 tilt= 0.06 |v|=0.0076
+  t=4.01 phase=shift   fz_L=  81.90 tilt= 0.06 |v|=0.0081
+  t=4.11 phase=shift   fz_L=  81.99 tilt= 0.07 |v|=0.0075
+  t=4.21 phase=shift   fz_L=  82.96 tilt= 0.07 |v|=0.0076
+  t=4.31 phase=shift   fz_L=  83.98 tilt= 0.08 |v|=0.0074
+  t=4.41 phase=shift   fz_L=  85.29 tilt= 0.09 |v|=0.0077
+  t=4.51 phase=shift   fz_L=  85.60 tilt= 0.09 |v|=0.0073
+  t=4.61 phase=shift   fz_L=  86.28 tilt= 0.10 |v|=0.0073
+  t=4.71 phase=shift   fz_L=  87.39 tilt= 0.11 |v|=0.0075
+  t=4.81 phase=shift   fz_L=  87.91 tilt= 0.11 |v|=0.0074
+  t=4.91 phase=shift   fz_L=  88.39 tilt= 0.12 |v|=0.0072
+  t=5.01 phase=shift   fz_L=  88.44 tilt= 0.13 |v|=0.0069
+  t=5.11 phase=shift   fz_L=  88.28 tilt= 0.14 |v|=0.0062
+  t=5.21 phase=shift   fz_L=  86.50 tilt= 0.15 |v|=0.0048
+  t=5.31 phase=shift   fz_L=  84.44 tilt= 0.17 |v|=0.0035
+  t=5.41 phase=shift   fz_L=  82.24 tilt= 0.18 |v|=0.0015
+  t=5.51 phase=shift   fz_L=  80.52 tilt= 0.18 |v|=0.0009
+  t=5.61 phase=shift   fz_L=  79.24 tilt= 0.18 |v|=0.0020
+  t=5.71 phase=shift   fz_L=  78.04 tilt= 0.18 |v|=0.0022
+  t=5.81 phase=shift   fz_L=  76.90 tilt= 0.17 |v|=0.0020
+  t=5.91 phase=shift   fz_L=  77.88 tilt= 0.17 |v|=0.0016
+  t=6.01 phase=shift   fz_L=  77.03 tilt= 0.18 |v|=0.0010
+  t=6.11 phase=shift   fz_L=  76.20 tilt= 0.18 |v|=0.0006
+  t=6.21 phase=shift   fz_L=  75.17 tilt= 0.19 |v|=0.0004
+  t=6.31 phase=shift   fz_L=  74.16 tilt= 0.20 |v|=0.0004
+  t=6.41 phase=shift   fz_L=  73.19 tilt= 0.20 |v|=0.0004
+  t=6.51 phase=shift   fz_L=  72.32 tilt= 0.21 |v|=0.0006
+  t=6.61 phase=shift   fz_L=  71.45 tilt= 0.21 |v|=0.0009
+  t=6.71 phase=shift   fz_L=  70.79 tilt= 0.22 |v|=0.0011
+  t=6.81 phase=shift   fz_L=  70.10 tilt= 0.22 |v|=0.0008
+  t=6.91 phase=shift   fz_L=  68.98 tilt= 0.22 |v|=0.0009
+  t=7.01 phase=shift   fz_L=  68.82 tilt= 0.23 |v|=0.0012
+  t=7.11 phase=shift   fz_L=  68.22 tilt= 0.23 |v|=0.0012
+  t=7.21 phase=shift   fz_L=  67.67 tilt= 0.23 |v|=0.0010
+  t=7.31 phase=shift   fz_L=  67.06 tilt= 0.24 |v|=0.0010
+  t=7.41 phase=shift   fz_L=  66.43 tilt= 0.24 |v|=0.0011
+  t=7.51 phase=shift   fz_L=  65.46 tilt= 0.25 |v|=0.0011
+  t=7.61 phase=shift   fz_L=  65.43 tilt= 0.25 |v|=0.0008
+  t=7.71 phase=shift   fz_L=  64.88 tilt= 0.26 |v|=0.0008
+  t=7.81 phase=shift   fz_L=  64.35 tilt= 0.26 |v|=0.0009
+  t=7.91 phase=shift   fz_L=  64.76 tilt= 0.26 |v|=0.0007
+  t=8.01 phase=shift   fz_L=  63.08 tilt= 0.27 |v|=0.0008
+  t=8.11 phase=shift   fz_L=  63.65 tilt= 0.27 |v|=0.0010
+  t=8.21 phase=shift   fz_L=  63.50 tilt= 0.28 |v|=0.0008
+  t=8.31 phase=shift   fz_L=  62.92 tilt= 0.28 |v|=0.0010
+  t=8.41 phase=shift   fz_L=  62.96 tilt= 0.29 |v|=0.0010
+  t=8.51 phase=shift   fz_L=  62.94 tilt= 0.29 |v|=0.0011
+  t=8.61 phase=shift   fz_L=  62.83 tilt= 0.29 |v|=0.0009
+  t=8.71 phase=shift   fz_L=  62.57 tilt= 0.30 |v|=0.0012
+  t=8.81 phase=shift   fz_L=  62.61 tilt= 0.30 |v|=0.0011
+  t=8.91 phase=shift   fz_L=  62.36 tilt= 0.31 |v|=0.0012
+  t=9.01 phase=shift   fz_L=  62.41 tilt= 0.31 |v|=0.0010
+  t=9.11 phase=shift   fz_L=  62.15 tilt= 0.31 |v|=0.0012
+  t=9.21 phase=shift   fz_L=  61.86 tilt= 0.32 |v|=0.0007
+  t=9.31 phase=shift   fz_L=  62.14 tilt= 0.32 |v|=0.0010
+  t=9.41 phase=shift   fz_L=  61.89 tilt= 0.33 |v|=0.0012
+  t=9.51 phase=shift   fz_L=  62.64 tilt= 0.33 |v|=0.0005
+  t=9.61 phase=shift   fz_L=  61.82 tilt= 0.34 |v|=0.0009
+  t=9.71 phase=shift   fz_L=  61.71 tilt= 0.34 |v|=0.0010
+  t=9.81 phase=shift   fz_L=  61.56 tilt= 0.34 |v|=0.0011
+  t=9.91 phase=shift   fz_L=  61.46 tilt= 0.35 |v|=0.0010
+  t=10.01 phase=swing   fz_L=  61.34 tilt= 0.35 |v|=0.0010
+  t=10.11 phase=swing   fz_L=  43.22 tilt= 0.80 |v|=0.0205
+  t=10.21 phase=swing   fz_L=  65.19 tilt= 2.61 |v|=0.0716
+  t=10.31 phase=swing   fz_L=  93.75 tilt= 4.93 |v|=0.1243
+  t=10.41 phase=swing   fz_L=  98.07 tilt= 6.84 |v|=0.1330
+  t=10.51 phase=swing   fz_L= 105.45 tilt= 8.83 |v|=0.0571
+  t=10.61 phase=swing   fz_L= 118.69 tilt=10.54 |v|=0.1075
+  t=10.71 phase=swing   fz_L=  78.04 tilt=11.94 |v|=0.2652
+  t=10.81 phase=swing   fz_L=  74.49 tilt=13.42 |v|=0.4219
+  t=10.91 phase=swing   fz_L=  70.45 tilt=14.88 |v|=0.5709
+  t=11.01 phase=swing   fz_L=  68.53 tilt=16.70 |v|=0.7096
+  t=11.11 phase=swing   fz_L=  59.53 tilt=18.90 |v|=0.8178
+  t=11.21 phase=swing   fz_L=  59.79 tilt=21.84 |v|=0.9382
+  t=11.31 phase=swing   fz_L=  48.47 tilt=25.50 |v|=1.0737
+  t=11.41 phase=swing   fz_L=  70.12 tilt=30.11 |v|=1.2534
+  t=11.51 phase=swing   fz_L=  47.68 tilt=35.66 |v|=1.5018
+  t=11.61 phase=swing   fz_L=  22.91 tilt=41.82 |v|=1.8629
+  t=11.71 phase=swing   fz_L= 111.07 tilt=48.45 |v|=2.4026

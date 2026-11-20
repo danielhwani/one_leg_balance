@@ -1,0 +1,33 @@
+=== ÂøÁö Èí¼ö(¹«¸­ ±ÁÇô Äí¼Ç) Ãß°¡ - swing_duration x land_knee ½ºÀ¬ ===
+swing_dur= 0.5 land_knee= 15.0: touch=None landed=None fell=2.0099999999999794
+swing_dur= 0.5 land_knee= 20.0: touch=1.8599999999999823 landed=None fell=2.0599999999999783
+swing_dur= 0.5 land_knee= 25.0: touch=None landed=None fell=1.8899999999999817
+swing_dur= 0.8 land_knee= 15.0: touch=None landed=None fell=2.0599999999999783
+swing_dur= 0.8 land_knee= 20.0: touch=None landed=None fell=2.019999999999979
+swing_dur= 0.8 land_knee= 25.0: touch=None landed=None fell=1.96999999999998
+swing_dur= 1.2 land_knee= 15.0: touch=2.0099999999999794 landed=None fell=2.2399999999999745
+swing_dur= 1.2 land_knee= 20.0: touch=2.0099999999999794 landed=None fell=2.209999999999975
+swing_dur= 1.2 land_knee= 25.0: touch=None landed=None fell=2.0599999999999783
+
+=== »ó¼¼ ÃßÀû: swing_dur=0.8, land_knee=20 ===
+  t=0.01 phase=stand   fz_L=  72.56 tilt= 0.01 |v|=0.0012
+  t=0.11 phase=stand   fz_L=  72.52 tilt= 0.01 |v|=0.0009
+  t=0.21 phase=swing   fz_L=  72.52 tilt= 0.01 |v|=0.0007
+  t=0.31 phase=swing   fz_L=  57.29 tilt= 0.51 |v|=0.0124
+  t=0.41 phase=swing   fz_L=  56.85 tilt= 1.70 |v|=0.0367
+  t=0.51 phase=swing   fz_L=  69.05 tilt= 3.20 |v|=0.0672
+  t=0.61 phase=swing   fz_L=  94.32 tilt= 5.05 |v|=0.0758
+  t=0.71 phase=swing   fz_L= 101.32 tilt= 6.87 |v|=0.0614
+  t=0.81 phase=swing   fz_L= 107.19 tilt= 8.42 |v|=0.1221
+  t=0.91 phase=swing   fz_L= 109.11 tilt=10.11 |v|=0.2320
+  t=1.01 phase=swing   fz_L= 102.37 tilt=11.92 |v|=0.3615
+  t=1.11 phase=swing   fz_L=  97.27 tilt=13.82 |v|=0.4873
+  t=1.21 phase=swing   fz_L=  89.93 tilt=15.89 |v|=0.6225
+  t=1.31 phase=swing   fz_L=  78.61 tilt=18.34 |v|=0.7611
+  t=1.41 phase=swing   fz_L=  65.76 tilt=21.33 |v|=0.9052
+  t=1.51 phase=swing   fz_L=  67.69 tilt=25.04 |v|=1.0677
+  t=1.61 phase=swing   fz_L=  70.58 tilt=29.54 |v|=1.2645
+  t=1.71 phase=swing   fz_L=  68.64 tilt=34.89 |v|=1.5158
+  t=1.81 phase=swing   fz_L=  50.78 tilt=40.91 |v|=1.8618
+  t=1.91 phase=swing   fz_L=  88.65 tilt=47.65 |v|=2.3252
+  t=2.01 phase=swing   fz_L=  94.07 tilt=54.69 |v|=2.9799
