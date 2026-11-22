@@ -56,7 +56,7 @@ def main():
     model = common.load_model()
     nv, nu = model.nv, model.nu
     qpos_eq0, qvel_eq0 = common.find_equilibrium(model)
-    qpos_eq1 = np.load("best_one_leg_qpos_v4.npy")
+    qpos_eq1 = np.load("best_one_leg_qpos_v5.npy")
 
     foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
     foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
