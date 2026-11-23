@@ -1,0 +1,18 @@
+웨이포인트별 선형화 중...
+41개 웨이포인트 선형화 완료
+역방향 Riccati 재귀로 K(t) 계산 중...
+TV-LQR 게인 계산 완료
+
+=== TV-LQR v2 (스윙 다리 전반부에 다 끝냄) ===
+  [tvlqr_v2] t=0.01 tilt=  0.01 |v|=0.0076 knee_actual= -0.0 knee_target=  0.0
+  [tvlqr_v2] t=0.11 tilt=  1.24 |v|=1.4829 knee_actual= -1.1 knee_target=  0.1
+  [tvlqr_v2] t=0.21 tilt=  2.65 |v|=1.6481 knee_actual= -0.9 knee_target=  0.3
+  [tvlqr_v2] t=0.31 tilt=  1.67 |v|=1.4387 knee_actual= -1.6 knee_target=  0.6
+  [tvlqr_v2] t=0.41 tilt=  7.85 |v|=1.7671 knee_actual= -1.0 knee_target=  1.0
+  [tvlqr_v2] t=0.51 tilt= 10.73 |v|=1.7173 knee_actual= -1.9 knee_target=  1.5
+  [tvlqr_v2] t=0.61 tilt= 18.09 |v|=1.8544 knee_actual= -0.6 knee_target=  2.1
+  [tvlqr_v2] t=0.71 tilt= 22.61 |v|=1.7854 knee_actual= -1.6 knee_target=  2.8
+  [tvlqr_v2] t=0.81 tilt= 29.11 |v|=1.5325 knee_actual= -1.3 knee_target=  3.6
+  [tvlqr_v2] t=0.91 tilt= 39.27 |v|=1.8985 knee_actual= -0.7 knee_target=  4.5
+  [tvlqr_v2] t=1.01 tilt= 54.39 |v|=3.2769 knee_actual= -0.8 knee_target=  5.5
+[tvlqr_v2] 쓰러짐: t=1.02
