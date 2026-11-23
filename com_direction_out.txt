@@ -1,0 +1,16 @@
+leg_R(red) y-side: negative  leg_L(blue) y-side: positive (per earlier widen_pelvis check)
+t=0.00 pelvis_y=-0.0000 torso_xpos_y=-0.0000 foot_R_y=-0.4000 foot_L_y=0.4000
+t=0.01 s=0.00 pelvis_y=-0.0000 torso_xpos_y=-0.0000 foot_R_y=-0.4000 foot_L_y=0.4000
+t=0.51 s=0.10 pelvis_y=-0.0016 torso_xpos_y=-0.0016 foot_R_y=-0.3998 foot_L_y=0.3999
+t=1.01 s=0.20 pelvis_y=-0.0047 torso_xpos_y=-0.0047 foot_R_y=-0.3994 foot_L_y=0.3995
+t=1.51 s=0.30 pelvis_y=-0.0082 torso_xpos_y=-0.0082 foot_R_y=-0.3988 foot_L_y=0.3989
+t=2.01 s=0.40 pelvis_y=-0.0118 torso_xpos_y=-0.0118 foot_R_y=-0.3979 foot_L_y=0.3980
+t=2.51 s=0.50 pelvis_y=-0.0156 torso_xpos_y=-0.0156 foot_R_y=-0.3968 foot_L_y=0.3968
+t=3.01 s=0.60 pelvis_y=-0.0197 torso_xpos_y=-0.0197 foot_R_y=-0.3955 foot_L_y=0.3954
+t=3.51 s=0.70 pelvis_y=-0.0243 torso_xpos_y=-0.0243 foot_R_y=-0.3940 foot_L_y=0.3935
+t=4.01 s=0.80 pelvis_y=-0.0299 torso_xpos_y=-0.0299 foot_R_y=-0.3924 foot_L_y=0.3912
+t=4.51 s=0.90 pelvis_y=-0.0364 torso_xpos_y=-0.0364 foot_R_y=-0.3907 foot_L_y=0.3885
+t=5.01 s=1.00 pelvis_y=-0.0445 torso_xpos_y=-0.0444 foot_R_y=-0.3888 foot_L_y=0.3853
+t=5.51 s=1.00 pelvis_y=-0.0532 torso_xpos_y=-0.0532 foot_R_y=-0.3871 foot_L_y=0.3806
+t=6.01 s=1.00 pelvis_y=-0.0604 torso_xpos_y=-0.0604 foot_R_y=-0.3856 foot_L_y=0.3761
+t=6.51 s=1.00 pelvis_y=-0.0651 torso_xpos_y=-0.0651 foot_R_y=-0.3843 foot_L_y=0.3721
