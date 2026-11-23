@@ -1,15 +1,17 @@
-"""view_abduct_right_only.py
------------------------------
-새로 확인된 메커니즘: 오른쪽 다리만 벌리면(hip_abduct_R) 따로
-체중이동 신호를 주지 않아도 왼발(foot_L)에 자동으로 체중이
-쏠리고, 진짜로 수렴한다(정강이-땅 접촉 버그 수정 후 검증:
-목표 12도까지 60초 생존 + 완전 수렴, 16도부터 무너짐).
+"""view_weight_shift_phase1.py
+-------------------------------
+"오른발(빨간) 내딛기" 중 1단계만: 체중을 파란발(foot_L)로 옮기기.
+간접 명령 방식 - 빨간 다리(hip_abduct_R)에 양수 각도를 명령하면
+따로 체중이동 신호 없이도 파란발에 자동으로, 깨끗하게 체중이
+쏠린다(정강이-땅 접촉 버그 수정 후 검증: 목표 12도까지 60초 생존
++ 완전 수렴 - fz_파랑=171.2N, fz_빨강=75.1N, tilt=1.30도로 고정).
 
-이 데모는 목표 12도, 5초 램프 후 유지. 빨간 다리(foot_R)가
-벌어지고, 파란 다리(foot_L)가 체중을 받는 걸 색으로 확인한다.
+주의: 이 양수 명령은 빨간발을 "벌리는" 게 아니라 오히려 살짝
+안쪽으로 당긴다(부수효과) - 2단계(빨간발을 실제로 들어서 바깥으로
+내딛기)는 아직 미해결, 여기서는 1단계(체중이동)만 시연한다.
 
 실행:
-  python view_abduct_right_only.py
+  python view_weight_shift_phase1.py
 창을 닫으면 종료.
 """
 import math
@@ -57,10 +59,9 @@ def main():
     ctrl_limits = np.array([math.radians(30.0)] * nu)
 
     a_abduct_R = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, "act_hip_abduct_R")
-    foot_L_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
-    foot_R_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    foot_red_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_R")
+    foot_blue_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "foot_L")
 
-    # 좌우 혼동 방지 - foot_R(벌어지는, 빨간) / foot_L(체중을 받는, 파란)
     for bname, rgba in [("leg_R", [0.9, 0.1, 0.1, 1.0]), ("shin_R", [0.9, 0.1, 0.1, 1.0]),
                          ("foot_R", [0.9, 0.1, 0.1, 1.0]), ("leg_L", [0.1, 0.3, 0.9, 1.0]),
                          ("shin_L", [0.1, 0.3, 0.9, 1.0]), ("foot_L", [0.1, 0.3, 0.9, 1.0])]:
@@ -76,8 +77,9 @@ def main():
     data.qvel[:] = qvel_eq0
     mujoco.mj_forward(model, data)
 
-    print(f"빨간 다리(foot_R)만 벌림 (목표 {TARGET_DEG}도, 5초 램프) - 60초 검증된 안정값")
-    print("파란 다리(foot_L)에 체중이 자동으로 쏠려야 한다 (별도 체중이동 신호 없음)")
+    print("1단계: 체중을 파란발(foot_L)로 이동 - 빨간 다리 고관절(hip_abduct_R)")
+    print(f"에 간접 명령(목표 {TARGET_DEG}도, 5초 램프). 60초 검증된 안정값(완전 수렴).")
+    print("빨간발은 벌어지는 게 아니라 살짝 안쪽으로 당겨지는 부수효과만 있음.")
     print("창을 닫으면 종료.")
 
     last_print = -1.0
@@ -106,10 +108,10 @@ def main():
 
             if data.time - last_print >= 0.5:
                 last_print = data.time
-                fz_L = foot_fz(model, data, foot_L_id)
-                fz_R = foot_fz(model, data, foot_R_id)
+                fz_red = foot_fz(model, data, foot_red_id)
+                fz_blue = foot_fz(model, data, foot_blue_id)
                 tilt = common.tilt_deg(data.qpos)
-                print(f"  t={data.time:6.2f}s tilt={tilt:5.2f} fz_L={fz_L:6.1f} fz_R={fz_R:6.1f}")
+                print(f"  t={data.time:6.2f}s tilt={tilt:5.2f} fz_빨강={fz_red:6.1f} fz_파랑={fz_blue:6.1f}")
 
 
 if __name__ == "__main__":
