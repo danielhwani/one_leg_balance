@@ -54,8 +54,8 @@ def main():
     PUSH_DURATION_S = 0.1
     PUSH_FORCE_MAG = PUSH_EQUIV_MPS * total_mass / PUSH_DURATION_S
 
-    AMP_LATERAL = 3.0
-    AMP_FB = 4.0
+    AMP_LATERAL = 5.0
+    AMP_FB = 6.0
     PERIOD_S = 1.0
 
     data = mujoco.MjData(model)
