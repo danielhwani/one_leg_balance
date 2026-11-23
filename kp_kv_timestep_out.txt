@@ -1,0 +1,72 @@
+========== axis=0 (sagittal) ==========
+--- kp/kv x1.0, dt=0.005(기존) (kp/kv x1.0, dt=0.005, n_sub=2, axis=0) ---
+  push=0.45: 생존
+  push=0.50: fell@3.15
+  push=0.60: fell@2.04
+  push=0.70: fell@1.62
+  push=0.80: fell@1.39
+  push=1.00: fell@1.28
+--- kp/kv x2.0, dt=0.005(기존 타임스텝) (kp/kv x2.0, dt=0.005, n_sub=2, axis=0) ---
+  push=0.45: fell@0.44
+  push=0.50: fell@0.45
+  push=0.60: fell@1.12
+  push=0.70: fell@0.58
+  push=0.80: fell@0.50
+  push=1.00: fell@0.58
+--- kp/kv x2.0, dt=0.001(5배 세밀) (kp/kv x2.0, dt=0.001, n_sub=10, axis=0) ---
+  push=0.45: fell@1.41
+  push=0.50: fell@1.22
+  push=0.60: fell@1.06
+  push=0.70: fell@0.99
+  push=0.80: fell@1.19
+  push=1.00: fell@1.24
+--- kp/kv x3.0, dt=0.001(5배 세밀) (kp/kv x3.0, dt=0.001, n_sub=10, axis=0) ---
+  push=0.45: fell@0.90
+  push=0.50: fell@0.77
+  push=0.60: fell@0.81
+  push=0.70: fell@0.78
+  push=0.80: fell@0.80
+  push=1.00: fell@1.51
+--- kp/kv x3.0, dt=0.0005(10배 세밀) (kp/kv x3.0, dt=0.0005, n_sub=20, axis=0) ---
+  push=0.45: 생존
+  push=0.50: 생존
+  push=0.60: 생존
+  push=0.70: 생존
+  push=0.80: 생존
+  push=1.00: fell@1.98
+========== axis=1 (lateral) ==========
+--- kp/kv x1.0, dt=0.005(기존) (kp/kv x1.0, dt=0.005, n_sub=2, axis=1) ---
+  push=0.45: 생존
+  push=0.50: fell@2.24
+  push=0.60: fell@2.39
+  push=0.70: fell@1.47
+  push=0.80: fell@1.66
+  push=1.00: fell@2.74
+--- kp/kv x2.0, dt=0.005(기존 타임스텝) (kp/kv x2.0, dt=0.005, n_sub=2, axis=1) ---
+  push=0.45: fell@0.54
+  push=0.50: fell@0.53
+  push=0.60: fell@0.52
+  push=0.70: fell@0.54
+  push=0.80: fell@0.53
+  push=1.00: fell@0.54
+--- kp/kv x2.0, dt=0.001(5배 세밀) (kp/kv x2.0, dt=0.001, n_sub=10, axis=1) ---
+  push=0.45: 생존
+  push=0.50: 생존
+  push=0.60: 생존
+  push=0.70: 생존
+  push=0.80: 생존
+  push=1.00: 생존
+--- kp/kv x3.0, dt=0.001(5배 세밀) (kp/kv x3.0, dt=0.001, n_sub=10, axis=1) ---
+  push=0.45: fell@1.98
+  push=0.50: fell@1.54
+  push=0.60: fell@1.26
+  push=0.70: fell@0.92
+  push=0.80: fell@1.68
+  push=1.00: fell@1.43
+--- kp/kv x3.0, dt=0.0005(10배 세밀) (kp/kv x3.0, dt=0.0005, n_sub=20, axis=1) ---
+  push=0.45: 생존
+  push=0.50: 생존
+  push=0.60: 생존
+  push=0.70: 생존
+  push=0.80: 생존
+  push=1.00: 생존
