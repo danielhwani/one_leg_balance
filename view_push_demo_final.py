@@ -2,13 +2,19 @@
 ---------------------------
 2026-11-23 최종 결론 데모: 발+골반 확대 + 다리 액추에이터 Kp/Kv
 x3.0 + 타임스텝 0.0005초 + R x2 - push 복원 한계가 원래 0.25 m/s
-에서 앞뒤 0.80 m/s, 좌우 1.20 m/s까지 늘어났다(README 참고).
+에서 늘어났다(README 참고).
+
+push_chest_test.py에서 확인한 대로, **가슴(chest)에 짧게(0.1초)
+실제 힘(xfrc_applied)을 주는 방식**으로 테스트한다 - 단순 속도킥
+(회전 없음)보다 현실적이다(회전 토크가 같이 생겨서 특히 앞뒤
+방향이 더 약해진다). 등가 push_mps 기준 한계: **앞뒤 ~0.5~0.6
+m/s, 좌우 ~1.05 m/s**(1.2에서 실패).
 
 화살표 키로 직접 밀어서 확인:
   Up/Down: 앞/뒤로 밀기 (+-X)
   Left/Right: 왼쪽/오른쪽으로 밀기 (+-Y)
-한 번 누르면 0.3 m/s씩 누적 - 2~3번 눌러서 0.6~0.9 m/s 정도의
-세기를 만들어보면 된다. 창을 닫으면 종료.
+한 번 누르면 등가 0.3 m/s 충격(가슴에 0.1초간 실제 힘)을 준다 -
+여러 번 누르면 겹쳐서 세진다. 창을 닫으면 종료.
 
 실행:
   python view_push_demo_final.py
@@ -52,32 +58,37 @@ def main():
     data.qvel[:] = qvel_eq0
     mujoco.mj_forward(model, data)
 
-    PUSH_SPEED_MPS = 0.3
+    chest_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, "chest")
+    total_mass = sum(model.body_mass)
+    PUSH_EQUIV_MPS = 0.3
+    PUSH_DURATION_S = 0.1
+    PUSH_FORCE_MAG = PUSH_EQUIV_MPS * total_mass / PUSH_DURATION_S
+
     KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT = 265, 264, 263, 262
-    pending_push = np.zeros(3)
-    push_total = np.zeros(2)  # 누적 세기 표시용(x,y)
+    active_pushes = []  # (end_time, force_vec) 리스트 - 겹치면 합산
 
     def key_callback(keycode):
+        vec = np.zeros(3)
         if keycode == KEY_UP:
-            pending_push[0] += PUSH_SPEED_MPS
-            push_total[0] += PUSH_SPEED_MPS
-            print(f"앞으로 밀기(+X {PUSH_SPEED_MPS} m/s, 누적 x={push_total[0]:.2f})")
+            vec[0] = PUSH_FORCE_MAG
+            print(f"앞으로 밀기(등가 {PUSH_EQUIV_MPS} m/s, 가슴에 {PUSH_FORCE_MAG:.0f}N x {PUSH_DURATION_S}s)")
         elif keycode == KEY_DOWN:
-            pending_push[0] -= PUSH_SPEED_MPS
-            push_total[0] -= PUSH_SPEED_MPS
-            print(f"뒤로 밀기(-X {PUSH_SPEED_MPS} m/s, 누적 x={push_total[0]:.2f})")
+            vec[0] = -PUSH_FORCE_MAG
+            print(f"뒤로 밀기(등가 {PUSH_EQUIV_MPS} m/s, 가슴에 {PUSH_FORCE_MAG:.0f}N x {PUSH_DURATION_S}s)")
         elif keycode == KEY_LEFT:
-            pending_push[1] += PUSH_SPEED_MPS
-            push_total[1] += PUSH_SPEED_MPS
-            print(f"왼쪽으로 밀기(+Y {PUSH_SPEED_MPS} m/s, 누적 y={push_total[1]:.2f})")
+            vec[1] = PUSH_FORCE_MAG
+            print(f"왼쪽으로 밀기(등가 {PUSH_EQUIV_MPS} m/s, 가슴에 {PUSH_FORCE_MAG:.0f}N x {PUSH_DURATION_S}s)")
         elif keycode == KEY_RIGHT:
-            pending_push[1] -= PUSH_SPEED_MPS
-            push_total[1] -= PUSH_SPEED_MPS
-            print(f"오른쪽으로 밀기(-Y {PUSH_SPEED_MPS} m/s, 누적 y={push_total[1]:.2f})")
+            vec[1] = -PUSH_FORCE_MAG
+            print(f"오른쪽으로 밀기(등가 {PUSH_EQUIV_MPS} m/s, 가슴에 {PUSH_FORCE_MAG:.0f}N x {PUSH_DURATION_S}s)")
+        else:
+            return
+        active_pushes.append([data.time + PUSH_DURATION_S, vec])
 
     print("발+골반 확대(발 대칭 0.56m) + Kp/Kv x3 + 타임스텝 0.0005 + R x2 - 최종 구성")
-    print("예전엔 0.25 m/s면 쓰러졌는데, 이젠 앞뒤 둘 다 0.75/좌우 ~1.05 m/s까지 버텨야 한다.")
-    print("화살표 키로 밀어보기(한 번에 0.3 m/s 누적). 창을 닫으면 종료.")
+    print("가슴에 짧게(0.1초) 실제 힘을 준다(회전 토크 포함, push_chest_test.py와 동일 모델) -")
+    print("앞뒤는 등가 ~0.5~0.6 m/s, 좌우는 ~1.05 m/s까지 버텨야 한다.")
+    print("화살표 키로 밀어보기(한 번에 등가 0.3 m/s, 여러 번 누르면 겹쳐서 세짐). 창을 닫으면 종료.")
 
     tick = 0
     PRINT_EVERY_SEC = 0.5
@@ -89,9 +100,11 @@ def main():
         viewer.cam.elevation = -10
         viewer.cam.lookat[:] = [0.0, 0.0, 1.0]
         while viewer.is_running():
-            if np.any(pending_push):
-                data.qvel[0:3] += pending_push
-                pending_push[:] = 0.0
+            active_pushes[:] = [p for p in active_pushes if p[0] > data.time]
+            if active_pushes:
+                data.xfrc_applied[chest_id, 0:3] = sum(p[1] for p in active_pushes)
+            else:
+                data.xfrc_applied[chest_id, 0:3] = 0.0
 
             for _ in range(n_sub):
                 dq = np.zeros(nv)
@@ -110,8 +123,7 @@ def main():
                 print(f"    t={data.time:6.2f}s 기울기={common.tilt_deg(data.qpos):5.2f}도 "
                       f"|v|={np.linalg.norm(data.qvel[:3]):.3f}")
             if common.tilt_deg(data.qpos) > 55:
-                print(f"쓰러짐! t={data.time:.2f} (누적 push x={push_total[0]:.2f} y={push_total[1]:.2f})")
-                push_total[:] = 0.0
+                print(f"쓰러짐! t={data.time:.2f}")
 
 
 if __name__ == "__main__":
