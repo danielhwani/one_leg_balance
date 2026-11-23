@@ -1,0 +1,14 @@
+=== 뒤로(axis=0, 음수) push ===
+push=-0.3: 생존
+push=-0.4: 생존
+push=-0.5: fell@3.24
+push=-0.6: fell@2.22
+push=-0.7: fell@1.90
+push=-0.8: fell@1.72
+=== 앞으로(axis=0, 양수) push (재확인) ===
+push=0.3: 생존
+push=0.4: 생존
+push=0.5: 생존
+push=0.6: 생존
+push=0.7: 생존
+push=0.8: 생존
