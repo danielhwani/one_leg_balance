@@ -1,0 +1,48 @@
+========== axis=0 (sagittal) ==========
+--- 크라우치 없음(발+골반만): pelvis_z=1.899 tilt=0.01 |v|=0.0022 ---
+  push=0.40: 고정K0=생존  TV-LQR=fell@2.07
+  push=0.45: 고정K0=생존  TV-LQR=fell@1.28
+  push=0.50: 고정K0=fell@3.15  TV-LQR=fell@1.54
+  push=0.55: 고정K0=fell@2.30  TV-LQR=fell@1.57
+  push=0.60: 고정K0=fell@2.04  TV-LQR=fell@1.46
+  push=0.70: 고정K0=fell@1.62  TV-LQR=fell@1.44
+--- 무릎 15도 크라우치: pelvis_z=0.456 tilt=92.52 |v|=0.6720 ---
+    (경고: settle이 안정적으로 안 됨 - 이 크라우치 각도는 너무 급함)
+  push=0.40: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.45: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.50: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.55: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.60: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.70: 고정K0=fell@0.01  TV-LQR=fell@0.01
+--- 무릎 25도 크라우치: pelvis_z=0.445 tilt=89.31 |v|=0.2444 ---
+    (경고: settle이 안정적으로 안 됨 - 이 크라우치 각도는 너무 급함)
+  push=0.40: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.45: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.50: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.55: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.60: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.70: 고정K0=fell@0.01  TV-LQR=fell@0.01
+========== axis=1 (lateral) ==========
+--- 크라우치 없음(발+골반만): pelvis_z=1.899 tilt=0.01 |v|=0.0022 ---
+  push=0.40: 고정K0=생존  TV-LQR=fell@3.26
+  push=0.45: 고정K0=생존  TV-LQR=생존
+  push=0.50: 고정K0=fell@2.24  TV-LQR=fell@1.88
+  push=0.55: 고정K0=fell@2.00  TV-LQR=fell@2.05
+  push=0.60: 고정K0=fell@2.39  TV-LQR=fell@2.09
+  push=0.70: 고정K0=fell@1.47  TV-LQR=fell@1.70
+--- 무릎 15도 크라우치: pelvis_z=0.456 tilt=92.52 |v|=0.6720 ---
+    (경고: settle이 안정적으로 안 됨 - 이 크라우치 각도는 너무 급함)
+  push=0.40: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.45: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.50: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.55: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.60: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.70: 고정K0=fell@0.01  TV-LQR=fell@0.01
+--- 무릎 25도 크라우치: pelvis_z=0.445 tilt=89.31 |v|=0.2444 ---
+    (경고: settle이 안정적으로 안 됨 - 이 크라우치 각도는 너무 급함)
+  push=0.40: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.45: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.50: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.55: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.60: 고정K0=fell@0.01  TV-LQR=fell@0.01
+  push=0.70: 고정K0=fell@0.01  TV-LQR=fell@0.01
