@@ -1,0 +1,23 @@
+=== theta_R=6도, 더 오래(60초) 버티는지 ===
+  t=0.01 s=0.00 tilt=0.00 fz_L=75.7 fz_R=75.7
+  t=1.01 s=0.20 tilt=0.00 fz_L=73.2 fz_R=78.3
+  t=2.01 s=0.40 tilt=0.01 fz_L=70.7 fz_R=80.3
+  t=3.01 s=0.60 tilt=0.02 fz_L=68.1 fz_R=82.3
+  t=4.01 s=0.80 tilt=0.04 fz_L=65.4 fz_R=84.9
+  t=5.01 s=1.00 tilt=0.09 fz_L=62.4 fz_R=86.7
+  t=6.01 s=1.00 tilt=0.16 fz_L=60.6 fz_R=82.1
+  t=7.01 s=1.00 tilt=0.24 fz_L=59.5 fz_R=79.6
+  t=8.01 s=1.00 tilt=0.36 fz_L=58.8 fz_R=75.1
+  t=9.01 s=1.00 tilt=0.56 fz_L=58.7 fz_R=68.2
+  t=10.01 s=1.00 tilt=0.92 fz_L=68.9 fz_R=85.0
+  t=11.01 s=1.00 tilt=2.64 fz_L=112.0 fz_R=128.7
+  t=12.01 s=1.00 tilt=45.22 fz_L=0.0 fz_R=0.0
+결과: fell@12.14 fz_L=0.0 fz_R=0.0 foot_y=-0.022(+0.378m)
+
+=== theta_R 스윕(6/10/15/20/25/30도), 20초 ===
+theta_R=  6.0: fell@12.14 fz_L=0.0 fz_R=0.0 foot_y=-0.022(+0.378m)
+theta_R= 10.0: fell@7.09 fz_L=0.0 fz_R=0.0 foot_y=-0.091(+0.309m)
+theta_R= 15.0: fell@5.22 fz_L=0.0 fz_R=0.0 foot_y=-0.297(+0.103m)
+theta_R= 20.0: fell@4.33 fz_L=0.0 fz_R=0.0 foot_y=-0.328(+0.072m)
+theta_R= 25.0: fell@3.80 fz_L=0.0 fz_R=0.0 foot_y=-0.376(+0.024m)
+theta_R= 30.0: fell@3.41 fz_L=0.0 fz_R=0.0 foot_y=-0.366(+0.034m)

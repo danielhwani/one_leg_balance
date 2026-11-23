@@ -1,0 +1,27 @@
+=== 좌우 흔들기(amp=3deg) - 관절별 최대 이탈 ===
+  act_waist_roll: 1.690도
+  act_hip_abduct_L: 0.811도
+  act_hip_abduct_R: 0.797도
+  act_ankle_roll_R: 0.724도
+  act_ankle_roll_L: 0.713도
+  act_neck_roll: 0.347도
+  act_shoulder_abduct_R: 0.317도
+  act_shoulder_abduct_L: 0.314도
+  act_knee_R: 0.040도
+  act_knee_L: 0.038도
+  act_hip_R: 0.022도
+  act_hip_L: 0.021도
+
+=== 앞뒤 흔들기(amp=4deg) - 관절별 최대 이탈 ===
+  act_waist_pitch: 4.390도
+  act_hip_L: 4.191도
+  act_hip_R: 4.191도
+  act_knee_L: 2.047도
+  act_knee_R: 2.047도
+  act_ankle_pitch_R: 1.995도
+  act_ankle_pitch_L: 1.995도
+  act_neck_pitch: 1.297도
+  act_arm_L: 0.535도
+  act_arm_R: 0.535도
+  act_wrist_flex_L: 0.089도
+  act_wrist_flex_R: 0.089도
