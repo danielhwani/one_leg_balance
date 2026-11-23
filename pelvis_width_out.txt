@@ -1,0 +1,31 @@
+=== 기존(골반 폭 0.25m) ===
+--- 기존 폭 0.25 (axis=0) ---
+  push=0.20: 고정K0=생존  TV-LQR=생존
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=fell@1.19  TV-LQR=fell@1.85
+  push=0.35: 고정K0=fell@1.23  TV-LQR=fell@1.67
+  push=0.40: 고정K0=fell@1.20  TV-LQR=fell@1.31
+  push=0.50: 고정K0=fell@1.00  TV-LQR=fell@1.43
+--- 기존 폭 0.25 (axis=1) ---
+  push=0.20: 고정K0=생존  TV-LQR=생존
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=fell@2.03  TV-LQR=fell@1.98
+  push=0.35: 고정K0=fell@2.16  TV-LQR=fell@2.05
+  push=0.40: 고정K0=fell@2.00  TV-LQR=fell@2.42
+  push=0.50: 고정K0=fell@2.12  TV-LQR=fell@1.50
+
+=== 골반 넓힘(0.40m) ===
+--- 넓힌 폭 0.40 (axis=0) ---
+  push=0.20: 고정K0=생존  TV-LQR=생존
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=생존
+  push=0.35: 고정K0=fell@1.61  TV-LQR=fell@1.18
+  push=0.40: 고정K0=fell@1.81  TV-LQR=fell@2.07
+  push=0.50: 고정K0=fell@1.50  TV-LQR=fell@0.98
+--- 넓힌 폭 0.40 (axis=1) ---
+  push=0.20: 고정K0=생존  TV-LQR=생존
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=생존
+  push=0.35: 고정K0=생존  TV-LQR=생존
+  push=0.40: 고정K0=생존  TV-LQR=생존
+  push=0.50: 고정K0=fell@2.22  TV-LQR=fell@1.34

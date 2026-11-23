@@ -1,0 +1,21 @@
+=== 고정 K0 vs TV-LQR(연속 재선형화) push 내구성 비교 (축0=x, 전후) ===
+push=0.20 m/s: 고정K0=생존  TV-LQR=생존
+push=0.25 m/s: 고정K0=생존  TV-LQR=생존
+push=0.30 m/s: 고정K0=fell@1.19  TV-LQR=fell@1.85
+push=0.35 m/s: 고정K0=fell@1.23  TV-LQR=fell@1.67
+push=0.40 m/s: 고정K0=fell@1.20  TV-LQR=fell@1.31
+push=0.45 m/s: 고정K0=fell@1.31  TV-LQR=fell@1.53
+push=0.50 m/s: 고정K0=fell@1.00  TV-LQR=fell@1.43
+push=0.60 m/s: 고정K0=fell@0.91  TV-LQR=fell@1.30
+push=0.70 m/s: 고정K0=fell@1.14  TV-LQR=fell@1.10
+push=0.80 m/s: 고정K0=fell@0.86  TV-LQR=fell@0.78
+
+=== 상세 추적: push=0.5 m/s, TV-LQR ===
+    t=0.01 tilt=0.03 |v|=0.328
+    t=0.21 tilt=0.46 |v|=0.531
+    t=0.41 tilt=8.48 |v|=0.321
+    t=0.61 tilt=13.09 |v|=0.531
+    t=0.81 tilt=14.31 |v|=0.960
+    t=1.01 tilt=23.24 |v|=0.485
+    t=1.21 tilt=29.92 |v|=1.554
+    t=1.41 tilt=52.86 |v|=2.973

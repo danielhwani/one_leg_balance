@@ -1,0 +1,27 @@
+서있을 때 fz_stance=123.16, 한 발 평형점에서 실측 fz_stance=139.05 (참고), 전체 몸무게=246.33 (게이팅 목표로 사용)
+웨이포인트별 선형화 중...
+TV-LQR 게인 계산 완료
+
+=== 하중 게이팅 TV-LQR ===
+  [weightgate] t=0.01 s_use=0.000 fz_stance= 123.16 tilt=  0.01 |v|=0.0006
+  [weightgate] t=0.11 s_use=0.000 fz_stance= 123.15 tilt=  0.01 |v|=0.0002
+  [weightgate] t=0.21 s_use=0.000 fz_stance= 123.16 tilt=  0.01 |v|=0.0001
+  [weightgate] t=0.31 s_use=0.000 fz_stance= 123.16 tilt=  0.01 |v|=0.0001
+  [weightgate] t=0.41 s_use=0.000 fz_stance= 123.15 tilt=  0.01 |v|=0.0000
+  [weightgate] t=0.51 s_use=0.000 fz_stance=  94.97 tilt=  0.07 |v|=0.2122
+  [weightgate] t=0.61 s_use=0.063 fz_stance=   0.00 tilt=  1.08 |v|=0.3487
+  [weightgate] t=0.71 s_use=0.234 fz_stance= 213.51 tilt=  3.40 |v|=0.4418
+  [weightgate] t=0.81 s_use=0.310 fz_stance= 196.87 tilt=  6.12 |v|=0.3107
+  [weightgate] t=0.91 s_use=0.374 fz_stance=   0.00 tilt=  6.02 |v|=0.5090
+  [weightgate] t=1.01 s_use=0.374 fz_stance=   0.00 tilt=  3.44 |v|=0.8808
+  [weightgate] t=1.11 s_use=0.374 fz_stance=   0.00 tilt=  2.80 |v|=0.9880
+  [weightgate] t=1.21 s_use=0.374 fz_stance=   0.00 tilt=  6.01 |v|=0.7984
+  [weightgate] t=1.31 s_use=0.374 fz_stance=   0.00 tilt=  9.38 |v|=0.5921
+  [weightgate] t=1.41 s_use=0.374 fz_stance=   0.00 tilt= 14.72 |v|=0.6105
+  [weightgate] t=1.51 s_use=0.374 fz_stance=   0.00 tilt= 23.55 |v|=0.9632
+  [weightgate] t=1.61 s_use=0.374 fz_stance=  54.29 tilt= 30.69 |v|=1.0893
+  [weightgate] t=1.71 s_use=0.374 fz_stance=  55.60 tilt= 34.64 |v|=1.2922
+  [weightgate] t=1.81 s_use=0.374 fz_stance=  76.11 tilt= 39.63 |v|=1.5733
+  [weightgate] t=1.91 s_use=0.374 fz_stance=  81.86 tilt= 45.55 |v|=1.8793
+  [weightgate] t=2.01 s_use=0.374 fz_stance=  76.80 tilt= 53.21 |v|=2.2367
+[weightgate] 쓰러짐: t=2.04 (s_use=0.374)

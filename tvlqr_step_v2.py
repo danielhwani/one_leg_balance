@@ -44,7 +44,7 @@ def main():
     model = common.load_model()
     nv, nu = model.nv, model.nu
     qpos_eq0, qvel_eq0 = common.find_equilibrium(model)
-    qpos_eq1 = np.load("best_one_leg_qpos_v4.npy")
+    qpos_eq1 = np.load("best_one_leg_qpos_v5.npy")
 
     data0 = mujoco.MjData(model)
     data0.qpos[:] = qpos_eq0
@@ -74,11 +74,17 @@ def main():
     hip_R_final = qpos_eq1[q_hip_R]
     knee_R_final = qpos_eq1[q_knee_R]
 
-    SWING_FRAC = 1.0  # 스윙 다리도 몸통 보정과 같은 속도로(전체 구간에 걸쳐)
+    # 진단 결과(tvlqr_diagnose.py, 2026-11-23): waist_roll/스탠스
+    # 리언(hip_abduct_L)이 실제로는 자기 목표보다 훨씬 앞서(전반부에)
+    # 다 끝내버리려 하고, 그게 균형에 도움이 됐다(억지로 못 하게
+    # 막으니 더 나빠졌다). 그 자연스러운 경향을 궤적 스케줄 자체에
+    # 반영한다 - 리언은 전반부(앞 35%)에 빨리 끝내고, 스윙 다리는
+    # 원래대로 전체 구간에 걸쳐 진행.
+    LEAN_FRAC = 0.35
 
     def build_qpos_at(s_global):
-        lean_s = smoothstep(s_global)
-        swing_s = smoothstep(min(1.0, s_global / SWING_FRAC))
+        lean_s = smoothstep(min(1.0, s_global / LEAN_FRAC))
+        swing_s = smoothstep(s_global)
 
         theta1 = theta1_final * lean_s
         P0, R0 = solve_torso_for_lean(theta1, theta2, theta3, theta4, theta5,
@@ -115,8 +121,8 @@ def main():
         Q[dofadr, dofadr] *= SWING_TRACK_WEIGHT
         Q[nv + dofadr, nv + dofadr] *= SWING_TRACK_WEIGHT
 
-    T_transition = 8.0
-    n_wp = 80
+    T_transition = 4.0
+    n_wp = 40
     wps = [build_qpos_at(i / n_wp) for i in range(n_wp + 1)]
     ctrl_wps = [ctrl_of(q) for q in wps]
 
