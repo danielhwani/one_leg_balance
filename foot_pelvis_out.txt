@@ -1,0 +1,34 @@
+========== axis=0 (sagittal(앞뒤)) ==========
+--- 발만 키움(0.24x0.16) (axis=0) ---
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=생존
+  push=0.35: 고정K0=fell@2.78  TV-LQR=fell@2.03
+  push=0.40: 고정K0=fell@2.45  TV-LQR=fell@1.89
+  push=0.45: 고정K0=fell@2.56  TV-LQR=fell@1.74
+  push=0.50: 고정K0=fell@2.13  TV-LQR=fell@2.01
+  push=0.60: 고정K0=fell@1.35  TV-LQR=fell@1.31
+--- 골반+발 둘 다 (axis=0) ---
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=생존
+  push=0.35: 고정K0=생존  TV-LQR=생존
+  push=0.40: 고정K0=생존  TV-LQR=fell@2.07
+  push=0.45: 고정K0=생존  TV-LQR=fell@1.28
+  push=0.50: 고정K0=fell@3.15  TV-LQR=fell@1.54
+  push=0.60: 고정K0=fell@2.04  TV-LQR=fell@1.46
+========== axis=1 (lateral(좌우)) ==========
+--- 발만 키움(0.24x0.16) (axis=1) ---
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=fell@2.52
+  push=0.35: 고정K0=fell@1.78  TV-LQR=fell@3.75
+  push=0.40: 고정K0=fell@1.84  TV-LQR=fell@1.45
+  push=0.45: 고정K0=fell@1.93  TV-LQR=fell@1.63
+  push=0.50: 고정K0=fell@2.57  TV-LQR=fell@2.94
+  push=0.60: 고정K0=fell@2.16  TV-LQR=fell@1.37
+--- 골반+발 둘 다 (axis=1) ---
+  push=0.25: 고정K0=생존  TV-LQR=생존
+  push=0.30: 고정K0=생존  TV-LQR=생존
+  push=0.35: 고정K0=생존  TV-LQR=생존
+  push=0.40: 고정K0=생존  TV-LQR=fell@3.26
+  push=0.45: 고정K0=생존  TV-LQR=생존
+  push=0.50: 고정K0=fell@2.24  TV-LQR=fell@1.88
+  push=0.60: 고정K0=fell@2.39  TV-LQR=fell@2.09
