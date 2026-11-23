@@ -68,7 +68,17 @@ def main():
     data.qvel[:] = qvel_eq0
     mujoco.mj_forward(model, data)
 
-    print("고정 K0 + 5초 램프(왼발 체중이동 +4도, 오른발 벌리기 +6도, 동시 진행)")
+    # 좌우 혼동 방지 - 코드상 foot_R(벌리며 슬라이딩하는 다리)을
+    # 빨간색, foot_L(체중이 쏠리는 다리)을 파란색으로.
+    for bname, rgba in [("leg_R", [0.9, 0.1, 0.1, 1.0]), ("shin_R", [0.9, 0.1, 0.1, 1.0]),
+                         ("foot_R", [0.9, 0.1, 0.1, 1.0]), ("leg_L", [0.1, 0.3, 0.9, 1.0]),
+                         ("shin_L", [0.1, 0.3, 0.9, 1.0]), ("foot_L", [0.1, 0.3, 0.9, 1.0])]:
+        bid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, bname)
+        for gi in range(model.body_geomadr[bid], model.body_geomadr[bid] + model.body_geomnum[bid]):
+            model.geom_rgba[gi] = rgba
+
+    print("고정 K0 + 5초 램프(파란 다리=foot_L에 체중이동 +4도, 빨간 다리=foot_R 벌리기 +6도, 동시 진행)")
+    print("빨간 다리가 슬라이딩하며 벌어지고, 파란 다리가 체중을 더 받아야 한다.")
     print("예전 결과: 29.47초에 결국 무너짐. 창을 닫으면 종료.")
 
     last_print = -1.0
