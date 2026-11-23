@@ -70,7 +70,7 @@ def main():
             model.geom_rgba[gi] = rgba
 
     TARGET_DEG = 12.0
-    RAMP_T = 5.0
+    RAMP_T = 2.0
 
     data = mujoco.MjData(model)
     data.qpos[:] = qpos_eq0
@@ -78,7 +78,9 @@ def main():
     mujoco.mj_forward(model, data)
 
     print("1단계: 체중을 파란발(foot_L)로 이동 - 빨간 다리 고관절(hip_abduct_R)")
-    print(f"에 간접 명령(목표 {TARGET_DEG}도, 5초 램프). 60초 검증된 안정값(완전 수렴).")
+    print(f"에 간접 명령(목표 {TARGET_DEG}도, {RAMP_T:.0f}초 램프).")
+    print("t=2~3초면 체중의 대부분(~63%)이 이미 파란발로 옮겨간다 - 완전")
+    print("수렴(34초)까지는 느린 꼬리가 더 남지만 위험하지 않음.")
     print("빨간발은 벌어지는 게 아니라 살짝 안쪽으로 당겨지는 부수효과만 있음.")
     print("창을 닫으면 종료.")
 
