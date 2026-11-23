@@ -1,0 +1,22 @@
+=== size_x=0.26 ===
+  axis=0 push=+0.70: fell@3.78
+  axis=0 push=-0.70: 积粮
+  axis=0 push=+0.75: fell@2.46
+  axis=0 push=-0.75: fell@2.52
+  axis=1 push=+1.00: 积粮
+  axis=1 push=-1.00: 积粮
+  axis=1 push=+1.10: 积粮
+  axis=1 push=-1.10: 积粮
+  axis=1 push=+1.20: fell@3.09
+  axis=1 push=-1.20: fell@3.09
+=== size_x=0.28 ===
+  axis=0 push=+0.70: 积粮
+  axis=0 push=-0.70: 积粮
+  axis=0 push=+0.75: 积粮
+  axis=0 push=-0.75: 积粮
+  axis=1 push=+1.00: 积粮
+  axis=1 push=-1.00: 积粮
+  axis=1 push=+1.10: fell@4.45
+  axis=1 push=-1.10: fell@4.45
+  axis=1 push=+1.20: fell@2.95
+  axis=1 push=-1.20: fell@2.95

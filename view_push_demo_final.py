@@ -29,10 +29,12 @@ from kp_kv_test import LEG_ACTUATORS, scale_kp_kv
 def main():
     model = common.load_model()
     widen_pelvis(model, 0.40)
-    # 발을 발목 중심으로 대칭(0.30 half-extent, 전체 0.60m)으로 -
-    # 기존엔 앞으로 0.06 치우쳐 있어서 뒤로 넘어지는 쪽이 약했다
-    # (앞 0.8 / 뒤 0.4 m/s로 비대칭) - 대칭+확대로 양쪽 다 0.8까지.
-    set_feet(model, 0.30, 0.16, 0.0)
+    # 발을 발목 중심으로 대칭으로(기존엔 앞으로 0.06 치우쳐 있어서
+    # 뒤로 넘어지는 쪽이 약했다: 앞 0.8/뒤 0.4 m/s 비대칭).
+    # 0.30으로 하면 앞뒤 0.8/0.8까지 대칭이지만 좌우가 1.20->1.00으로
+    # 줄어드는 부수효과가 있어서, 조금 줄인 0.28로 절충(앞뒤 0.75/0.75,
+    # 좌우 ~1.05) - 사용자 요청.
+    set_feet(model, 0.28, 0.16, 0.0)
     scale_kp_kv(model, LEG_ACTUATORS, 3.0)
     model.opt.timestep = 0.0005
     n_sub = round(0.01 / model.opt.timestep)
@@ -73,8 +75,8 @@ def main():
             push_total[1] -= PUSH_SPEED_MPS
             print(f"오른쪽으로 밀기(-Y {PUSH_SPEED_MPS} m/s, 누적 y={push_total[1]:.2f})")
 
-    print("발+골반 확대(발 대칭 0.60m) + Kp/Kv x3 + 타임스텝 0.0005 + R x2 - 최종 구성")
-    print("예전엔 0.25 m/s면 쓰러졌는데, 이젠 앞뒤 둘 다 0.8/좌우 1.2 m/s까지 버텨야 한다.")
+    print("발+골반 확대(발 대칭 0.56m) + Kp/Kv x3 + 타임스텝 0.0005 + R x2 - 최종 구성")
+    print("예전엔 0.25 m/s면 쓰러졌는데, 이젠 앞뒤 둘 다 0.75/좌우 ~1.05 m/s까지 버텨야 한다.")
     print("화살표 키로 밀어보기(한 번에 0.3 m/s 누적). 창을 닫으면 종료.")
 
     tick = 0
