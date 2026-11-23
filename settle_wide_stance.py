@@ -107,21 +107,21 @@ def main():
 
     orig_y = -0.400
 
-    print("=== theta_R=6도, 더 오래(60초) 버티는지 ===")
+    print("=== theta_R=6도, 더 오래(60초) 버티는지 (부호 수정: +4도로 왼발에 체중) ===")
     fell, fz_L, fz_R, foot_y = run_one(
         model, K0, qpos_eq0, qvel_eq0, ctrl_limits, n_sub,
         a_abduct_R, a_ankle_roll_R, a_abduct_L, foot_L_id, foot_R_id,
-        theta_r_deg=6.0, weight_shift_l_deg=-4.0, ramp_t=5.0, settle_t=60.0, verbose=True)
+        theta_r_deg=6.0, weight_shift_l_deg=4.0, ramp_t=5.0, settle_t=60.0, verbose=True)
     print(f"결과: {'생존' if fell is None else f'fell@{fell:.2f}'} "
           f"fz_L={fz_L:.1f} fz_R={fz_R:.1f} foot_y={foot_y:.3f}(+{foot_y-orig_y:.3f}m)")
 
     print()
-    print("=== theta_R 스윕(6/10/15/20/25/30도), 20초 ===")
+    print("=== theta_R 스윕(6/10/15/20/25/30도), 20초 (부호 수정) ===")
     for theta_r in [6.0, 10.0, 15.0, 20.0, 25.0, 30.0]:
         fell, fz_L, fz_R, foot_y = run_one(
             model, K0, qpos_eq0, qvel_eq0, ctrl_limits, n_sub,
             a_abduct_R, a_ankle_roll_R, a_abduct_L, foot_L_id, foot_R_id,
-            theta_r_deg=theta_r, weight_shift_l_deg=-4.0, ramp_t=5.0, settle_t=15.0,
+            theta_r_deg=theta_r, weight_shift_l_deg=4.0, ramp_t=5.0, settle_t=15.0,
             save=(theta_r == 6.0))
         print(f"theta_R={theta_r:5.1f}: {'생존' if fell is None else f'fell@{fell:.2f}'} "
               f"fz_L={fz_L:.1f} fz_R={fz_R:.1f} foot_y={foot_y:.3f}(+{foot_y-orig_y:.3f}m)")
