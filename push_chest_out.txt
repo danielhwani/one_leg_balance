@@ -1,0 +1,20 @@
+가슴 바디 id=2, 전체 질량=25.11kg, 충격 지속시간=0.1s
+(기존 push_mps와 비교: impulse = push_mps * total_mass, force = impulse/duration)
+=== sagittal(가슴 앞으로 밀기, +X) ===
+  등가 push=0.30 m/s (힘=75.3N x 0.1s): 생존
+  등가 push=0.50 m/s (힘=125.5N x 0.1s): 생존
+  등가 push=0.70 m/s (힘=175.8N x 0.1s): fell@3.00
+  등가 push=0.75 m/s (힘=188.3N x 0.1s): fell@2.25
+  등가 push=0.80 m/s (힘=200.9N x 0.1s): fell@1.97
+  등가 push=1.00 m/s (힘=251.1N x 0.1s): fell@1.62
+  등가 push=1.05 m/s (힘=263.7N x 0.1s): fell@1.54
+  등가 push=1.20 m/s (힘=301.3N x 0.1s): fell@1.39
+=== lateral(가슴 옆으로 밀기, +Y) ===
+  등가 push=0.30 m/s (힘=75.3N x 0.1s): 생존
+  등가 push=0.50 m/s (힘=125.5N x 0.1s): 생존
+  등가 push=0.70 m/s (힘=175.8N x 0.1s): 생존
+  등가 push=0.75 m/s (힘=188.3N x 0.1s): 생존
+  등가 push=0.80 m/s (힘=200.9N x 0.1s): 생존
+  등가 push=1.00 m/s (힘=251.1N x 0.1s): 생존
+  등가 push=1.05 m/s (힘=263.7N x 0.1s): 생존
+  등가 push=1.20 m/s (힘=301.3N x 0.1s): fell@2.00
