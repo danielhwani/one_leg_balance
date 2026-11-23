@@ -1,0 +1,74 @@
+========== axis=0 (sagittal) ==========
+--- R 그대로 (R_scale=1.0, axis=0) ---
+  push=0.80: 생존
+  push=1.00: fell@1.98
+  push=1.10: fell@1.76
+  push=1.20: fell@1.56
+  push=1.30: fell@1.39
+  push=1.40: fell@1.26
+  push=1.60: fell@1.07
+  push=1.80: fell@0.84
+--- R x2 (R_scale=2.0, axis=0) ---
+  push=0.80: 생존
+  push=1.00: fell@1.96
+  push=1.10: fell@1.75
+  push=1.20: fell@1.60
+  push=1.30: fell@1.47
+  push=1.40: fell@1.32
+  push=1.60: fell@1.15
+  push=1.80: fell@0.87
+--- R x5 (R_scale=5.0, axis=0) ---
+  push=0.80: fell@3.52
+  push=1.00: fell@1.90
+  push=1.10: fell@1.80
+  push=1.20: fell@1.59
+  push=1.30: fell@1.50
+  push=1.40: fell@1.42
+  push=1.60: fell@1.32
+  push=1.80: fell@1.17
+--- R x10 (R_scale=10.0, axis=0) ---
+  push=0.80: fell@2.93
+  push=1.00: fell@1.87
+  push=1.10: fell@1.71
+  push=1.20: fell@1.63
+  push=1.30: fell@1.50
+  push=1.40: fell@1.43
+  push=1.60: fell@1.34
+  push=1.80: fell@1.28
+========== axis=1 (lateral) ==========
+--- R 그대로 (R_scale=1.0, axis=1) ---
+  push=0.80: 생존
+  push=1.00: 생존
+  push=1.10: fell@5.26
+  push=1.20: fell@2.49
+  push=1.30: fell@1.99
+  push=1.40: fell@1.77
+  push=1.60: fell@1.45
+  push=1.80: fell@1.24
+--- R x2 (R_scale=2.0, axis=1) ---
+  push=0.80: 생존
+  push=1.00: 생존
+  push=1.10: 생존
+  push=1.20: 생존
+  push=1.30: fell@2.29
+  push=1.40: fell@1.93
+  push=1.60: fell@1.56
+  push=1.80: fell@1.37
+--- R x5 (R_scale=5.0, axis=1) ---
+  push=0.80: 생존
+  push=1.00: 생존
+  push=1.10: 생존
+  push=1.20: fell@4.12
+  push=1.30: fell@3.42
+  push=1.40: fell@2.17
+  push=1.60: fell@1.60
+  push=1.80: fell@1.39
+--- R x10 (R_scale=10.0, axis=1) ---
+  push=0.80: 생존
+  push=1.00: 생존
+  push=1.10: fell@2.46
+  push=1.20: fell@2.56
+  push=1.30: fell@3.17
+  push=1.40: fell@2.18
+  push=1.60: fell@1.60
+  push=1.80: fell@1.38
