@@ -1,0 +1,36 @@
+--- 기존(앞 0.06 오프셋) (foot pos_x=0.06, axis=0) ---
+  push=+0.50: 생존
+  push=+0.60: 생존
+  push=+0.70: 생존
+  push=+0.80: 생존
+  push=+0.90: fell@2.24
+--- 기존(앞 0.06 오프셋) (foot pos_x=0.06, axis=0) ---
+  push=-0.50: fell@3.24
+  push=-0.60: fell@2.22
+  push=-0.70: fell@1.90
+  push=-0.80: fell@1.72
+  push=-0.90: fell@1.65
+--- 발목 중심(대칭) (foot pos_x=0.0, axis=0) ---
+  push=+0.50: 생존
+  push=+0.60: 생존
+  push=+0.70: fell@2.52
+  push=+0.80: fell@2.02
+  push=+0.90: fell@1.82
+--- 발목 중심(대칭) (foot pos_x=0.0, axis=0) ---
+  push=-0.50: 생존
+  push=-0.60: 생존
+  push=-0.70: fell@2.57
+  push=-0.80: fell@2.04
+  push=-0.90: fell@1.78
+--- 뒤로 0.06 오프셋 (foot pos_x=-0.06, axis=0) ---
+  push=+0.50: fell@3.04
+  push=+0.60: fell@2.21
+  push=+0.70: fell@1.91
+  push=+0.80: fell@1.74
+  push=+0.90: fell@1.70
+--- 뒤로 0.06 오프셋 (foot pos_x=-0.06, axis=0) ---
+  push=-0.50: 생존
+  push=-0.60: 생존
+  push=-0.70: 생존
+  push=-0.80: 생존
+  push=-0.90: fell@2.26

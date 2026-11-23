@@ -1,0 +1,9 @@
+=== 최종 검증: 앞/뒤/좌/우 ===
+axis=0 push=+0.80: 생존
+axis=0 push=-0.80: 생존
+axis=0 push=+0.90: fell@1.91
+axis=0 push=-0.90: fell@1.94
+axis=1 push=+1.20: fell@2.96
+axis=1 push=-1.20: fell@2.96
+axis=1 push=+1.30: fell@2.92
+axis=1 push=-1.30: fell@2.97
