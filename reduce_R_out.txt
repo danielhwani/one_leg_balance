@@ -1,0 +1,82 @@
+========== axis=0 (sagittal) ==========
+--- R 그대로(기존) (R_scale=1.0, axis=0) ---
+  push=0.45: 고정K0=생존  TV-LQR=fell@1.28
+  push=0.50: 고정K0=fell@3.15  TV-LQR=fell@1.54
+  push=0.55: 고정K0=fell@2.30  TV-LQR=fell@1.57
+  push=0.60: 고정K0=fell@2.04  TV-LQR=fell@1.46
+  push=0.65: 고정K0=fell@1.81  TV-LQR=fell@1.19
+  push=0.70: 고정K0=fell@1.62  TV-LQR=fell@1.44
+  push=0.80: 고정K0=fell@1.39  TV-LQR=fell@1.57
+  push=0.90: 고정K0=fell@1.33  TV-LQR=fell@0.84
+  push=1.00: 고정K0=fell@1.28  TV-LQR=fell@0.90
+--- R x0.5 (R_scale=0.5, axis=0) ---
+  push=0.45: 고정K0=fell@1.19  TV-LQR=fell@1.41
+  push=0.50: 고정K0=fell@1.22  TV-LQR=fell@1.04
+  push=0.55: 고정K0=fell@1.22  TV-LQR=fell@1.47
+  push=0.60: 고정K0=fell@1.30  TV-LQR=fell@1.72
+  push=0.65: 고정K0=fell@1.11  TV-LQR=fell@1.25
+  push=0.70: 고정K0=fell@0.96  TV-LQR=fell@1.22
+  push=0.80: 고정K0=fell@0.92  TV-LQR=fell@0.94
+  push=0.90: 고정K0=fell@0.94  TV-LQR=fell@1.04
+  push=1.00: 고정K0=fell@0.94  TV-LQR=fell@1.02
+--- R x0.2 (R_scale=0.2, axis=0) ---
+  push=0.45: 고정K0=fell@0.82  TV-LQR=fell@0.95
+  push=0.50: 고정K0=fell@1.05  TV-LQR=fell@1.03
+  push=0.55: 고정K0=fell@0.70  TV-LQR=fell@0.85
+  push=0.60: 고정K0=fell@0.81  TV-LQR=fell@0.76
+  push=0.65: 고정K0=fell@0.70  TV-LQR=fell@0.75
+  push=0.70: 고정K0=fell@0.77  TV-LQR=fell@0.72
+  push=0.80: 고정K0=fell@0.76  TV-LQR=fell@0.72
+  push=0.90: 고정K0=fell@0.76  TV-LQR=fell@0.78
+  push=1.00: 고정K0=fell@0.73  TV-LQR=fell@0.67
+--- R x0.1 (R_scale=0.1, axis=0) ---
+  push=0.45: 고정K0=fell@1.25  TV-LQR=fell@1.32
+  push=0.50: 고정K0=fell@0.67  TV-LQR=fell@0.99
+  push=0.55: 고정K0=fell@1.00  TV-LQR=fell@0.99
+  push=0.60: 고정K0=fell@0.83  TV-LQR=fell@0.65
+  push=0.65: 고정K0=fell@1.11  TV-LQR=fell@1.05
+  push=0.70: 고정K0=fell@0.83  TV-LQR=fell@0.70
+  push=0.80: 고정K0=fell@0.84  TV-LQR=fell@0.85
+  push=0.90: 고정K0=fell@0.70  TV-LQR=fell@0.69
+  push=1.00: 고정K0=fell@0.78  TV-LQR=fell@0.75
+========== axis=1 (lateral) ==========
+--- R 그대로(기존) (R_scale=1.0, axis=1) ---
+  push=0.45: 고정K0=생존  TV-LQR=생존
+  push=0.50: 고정K0=fell@2.24  TV-LQR=fell@1.88
+  push=0.55: 고정K0=fell@2.00  TV-LQR=fell@2.05
+  push=0.60: 고정K0=fell@2.39  TV-LQR=fell@2.09
+  push=0.65: 고정K0=fell@1.39  TV-LQR=fell@2.30
+  push=0.70: 고정K0=fell@1.47  TV-LQR=fell@1.70
+  push=0.80: 고정K0=fell@1.66  TV-LQR=fell@1.83
+  push=0.90: 고정K0=fell@1.83  TV-LQR=fell@2.02
+  push=1.00: 고정K0=fell@2.74  TV-LQR=fell@1.79
+--- R x0.5 (R_scale=0.5, axis=1) ---
+  push=0.45: 고정K0=fell@1.42  TV-LQR=fell@1.85
+  push=0.50: 고정K0=fell@1.22  TV-LQR=fell@1.02
+  push=0.55: 고정K0=fell@1.26  TV-LQR=fell@1.72
+  push=0.60: 고정K0=fell@1.01  TV-LQR=fell@0.82
+  push=0.65: 고정K0=fell@1.16  TV-LQR=fell@1.59
+  push=0.70: 고정K0=fell@1.65  TV-LQR=fell@1.74
+  push=0.80: 고정K0=fell@1.13  TV-LQR=fell@1.23
+  push=0.90: 고정K0=fell@1.36  TV-LQR=fell@1.18
+  push=1.00: 고정K0=fell@2.03  TV-LQR=fell@2.09
+--- R x0.2 (R_scale=0.2, axis=1) ---
+  push=0.45: 고정K0=fell@1.06  TV-LQR=fell@1.61
+  push=0.50: 고정K0=fell@1.69  TV-LQR=fell@2.14
+  push=0.55: 고정K0=fell@1.08  TV-LQR=fell@1.11
+  push=0.60: 고정K0=fell@1.28  TV-LQR=fell@1.07
+  push=0.65: 고정K0=fell@1.18  TV-LQR=fell@0.93
+  push=0.70: 고정K0=fell@0.75  TV-LQR=fell@0.90
+  push=0.80: 고정K0=fell@1.69  TV-LQR=fell@1.73
+  push=0.90: 고정K0=fell@1.18  TV-LQR=fell@0.88
+  push=1.00: 고정K0=fell@1.30  TV-LQR=fell@1.71
+--- R x0.1 (R_scale=0.1, axis=1) ---
+  push=0.45: 고정K0=fell@0.95  TV-LQR=fell@0.99
+  push=0.50: 고정K0=fell@2.50  TV-LQR=fell@1.95
+  push=0.55: 고정K0=fell@1.54  TV-LQR=fell@2.13
+  push=0.60: 고정K0=fell@1.44  TV-LQR=fell@1.28
+  push=0.65: 고정K0=fell@0.71  TV-LQR=fell@0.66
+  push=0.70: 고정K0=fell@1.31  TV-LQR=fell@1.61
+  push=0.80: 고정K0=fell@0.88  TV-LQR=fell@0.85
+  push=0.90: 고정K0=fell@1.30  TV-LQR=fell@1.59
+  push=1.00: 고정K0=fell@0.89  TV-LQR=fell@1.09

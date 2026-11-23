@@ -1,0 +1,34 @@
+========== axis=0 (sagittal) ==========
+--- 발+골반만(기존 질량): pelvis_z=1.899 total_mass=25.11 (axis=0) ---
+  push=0.40: 고정K0=생존  TV-LQR=fell@2.07
+  push=0.45: 고정K0=생존  TV-LQR=fell@1.28
+  push=0.50: 고정K0=fell@3.15  TV-LQR=fell@1.54
+  push=0.55: 고정K0=fell@2.30  TV-LQR=fell@1.57
+  push=0.60: 고정K0=fell@2.04  TV-LQR=fell@1.46
+  push=0.65: 고정K0=fell@1.81  TV-LQR=fell@1.19
+  push=0.70: 고정K0=fell@1.62  TV-LQR=fell@1.44
+--- 가슴 9->5, 머리 4->2: pelvis_z=1.899 total_mass=19.10 (axis=0) ---
+  push=0.40: 고정K0=생존  TV-LQR=fell@1.54
+  push=0.45: 고정K0=생존  TV-LQR=fell@1.45
+  push=0.50: 고정K0=fell@2.39  TV-LQR=fell@1.51
+  push=0.55: 고정K0=fell@1.76  TV-LQR=fell@1.67
+  push=0.60: 고정K0=fell@1.59  TV-LQR=fell@1.46
+  push=0.65: 고정K0=fell@1.38  TV-LQR=fell@2.07
+  push=0.70: 고정K0=fell@1.16  TV-LQR=fell@1.47
+========== axis=1 (lateral) ==========
+--- 발+골반만(기존 질량): pelvis_z=1.899 total_mass=25.11 (axis=1) ---
+  push=0.40: 고정K0=생존  TV-LQR=fell@3.26
+  push=0.45: 고정K0=생존  TV-LQR=생존
+  push=0.50: 고정K0=fell@2.24  TV-LQR=fell@1.88
+  push=0.55: 고정K0=fell@2.00  TV-LQR=fell@2.05
+  push=0.60: 고정K0=fell@2.39  TV-LQR=fell@2.09
+  push=0.65: 고정K0=fell@1.39  TV-LQR=fell@2.30
+  push=0.70: 고정K0=fell@1.47  TV-LQR=fell@1.70
+--- 가슴 9->5, 머리 4->2: pelvis_z=1.899 total_mass=19.10 (axis=1) ---
+  push=0.40: 고정K0=생존  TV-LQR=생존
+  push=0.45: 고정K0=fell@1.87  TV-LQR=fell@1.45
+  push=0.50: 고정K0=fell@2.08  TV-LQR=fell@2.01
+  push=0.55: 고정K0=fell@1.34  TV-LQR=fell@1.89
+  push=0.60: 고정K0=fell@1.26  TV-LQR=fell@1.70
+  push=0.65: 고정K0=fell@1.31  TV-LQR=fell@2.60
+  push=0.70: 고정K0=fell@1.31  TV-LQR=fell@2.15
